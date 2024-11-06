@@ -33,7 +33,7 @@ async function getData() {
 export async function DashboardStats() {
   const { products, user, order } = await getData();
 
-  const totalAmount = order.reduce((accumalator, currentValue) => {
+  const totalAmount = order.reduce((accumalator: number, currentValue) => {
     return accumalator + currentValue.amount;
   }, 0);
   return (
