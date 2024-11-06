@@ -5,6 +5,7 @@ import { ProductCard } from "@/app/components/storefront/ProductCard";
 import prisma from "@/app/lib/db";
 import { notFound } from "next/navigation";
 import { unstable_noStore as noStore } from "next/cache";
+import { Product } from "@prisma/client";
 
 async function getData(productCategory: string) {
   switch (productCategory) {
@@ -24,7 +25,7 @@ async function getData(productCategory: string) {
 
       return {
         title: "All Products",
-        data: data,
+        data: data as Product[],
       };
     }
     case "fashion": {
