@@ -5,7 +5,14 @@ import { ProductCard } from "@/app/components/storefront/ProductCard";
 import prisma from "@/app/lib/db";
 import { notFound } from "next/navigation";
 import { unstable_noStore as noStore } from "next/cache";
-import { Product } from "@prisma/client";
+
+type Product = {
+  id: string;
+  name: string;
+  images: string[];
+  price: number;
+  description: string;
+};
 
 async function getData(productCategory: string) {
   switch (productCategory) {
