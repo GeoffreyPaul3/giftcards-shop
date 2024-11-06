@@ -1,6 +1,5 @@
 export const dynamic = 'force-dynamic';
 
-
 import { ProductCard } from "@/app/components/storefront/ProductCard";
 import prisma from "@/app/lib/db";
 import { notFound } from "next/navigation";
@@ -52,7 +51,7 @@ async function getData(productCategory: string) {
 
       return {
         title: "Products for Fashion",
-        data: data,
+        data: data as Product[],
       };
     }
     case "retail": {
@@ -72,7 +71,7 @@ async function getData(productCategory: string) {
 
       return {
         title: "Products For Retail",
-        data: data,
+        data: data as Product[],
       };
     }
     case "entertainment": {
@@ -92,7 +91,7 @@ async function getData(productCategory: string) {
 
       return {
         title: "Products for Entertainment",
-        data: data,
+        data: data as Product[],
       };
     }
     default: {
@@ -113,7 +112,7 @@ export default async function CategoriesPage(
     <section>
       <h1 className="font-semibold text-3xl my-5">{title}</h1>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {data.map((item) => (
+        {data.map((item: Product) => (
           <ProductCard item={item} key={item.id} />
         ))}
       </div>
