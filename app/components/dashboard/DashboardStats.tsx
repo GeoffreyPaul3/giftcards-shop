@@ -2,6 +2,13 @@ import prisma from "@/app/lib/db";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DollarSign, PartyPopper, ShoppingBag, User2 } from "lucide-react";
 
+
+type Order = {
+  amount: number;
+  // other properties of the order
+};
+
+
 async function getData() {
   const [user, products, order] = await Promise.all([
     prisma.user.findMany({
@@ -33,7 +40,7 @@ async function getData() {
 export async function DashboardStats() {
   const { products, user, order } = await getData();
 
-  const totalAmount = order.reduce((accumalator: number, currentValue) => {
+  const totalAmount = order.reduce((accumalator: number, currentValue: Order) => {
     return accumalator + currentValue.amount;
   }, 0);
   return (
