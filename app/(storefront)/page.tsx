@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 
 
 import { CategoriesSelection } from "../components/storefront/CategorySelection";

@@ -1,11 +1,13 @@
+export const dynamic = 'force-dynamic';
+
+
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { XCircle } from "lucide-react";
 import Link from "next/link";
-import { unstable_noStore as noStore } from "next/cache";
+
 
 export default function CancelRoute() {
-  noStore()
 
   return (
     <section className="w-full min-h-[80vh] flex items-center justify-center">
