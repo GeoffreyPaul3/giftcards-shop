@@ -1,7 +1,5 @@
-export const dynamic = 'force-dynamic';
-
-
-
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   Card,
   CardContent,
@@ -14,8 +12,6 @@ import { RecentSales } from "../components/dashboard/RecentSales";
 import { Chart } from "../components/dashboard/Chart";
 import prisma from "../lib/db";
 import { unstable_noStore as noStore } from "next/cache";
-
-
 
 async function getData() {
   const now = new Date();

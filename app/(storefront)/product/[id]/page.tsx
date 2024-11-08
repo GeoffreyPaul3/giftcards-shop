@@ -1,5 +1,3 @@
-export const dynamic = 'force-dynamic';
-
 
 import { addItem } from "@/app/actions";
 import { ShoppingBagButton } from "@/app/components/SubmitButtons";

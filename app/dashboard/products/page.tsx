@@ -1,6 +1,3 @@
-export const dynamic = 'force-dynamic';
-
-
 import prisma from "@/app/lib/db";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,7 +15,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
 import {
   Table,
   TableBody,
@@ -27,7 +23,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { MoreHorizontal, PlusCircle } from "lucide-react";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { MoreHorizontal, PlusCircle, UserIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { unstable_noStore as noStore } from "next/cache";

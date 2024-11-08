@@ -1,4 +1,4 @@
-export const dynamic = 'force-dynamic';
+
 
 import { CategoriesSelection } from "../components/storefront/CategorySelection";
 import { FeaturedProducts } from "../components/storefront/FeaturedProducts";

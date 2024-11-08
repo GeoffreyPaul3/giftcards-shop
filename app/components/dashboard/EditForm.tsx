@@ -32,8 +32,7 @@ import { editProduct } from "@/app/actions";
 import { useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
 import { productSchema } from "@/app/lib/zodSchemas";
-import { ProductStatus, Category } from "@prisma/client";
-
+import { type $Enums } from "@prisma/client";
 import { UploadDropzone } from "@/app/lib/uploadthing";
 
 interface iAppProps {
@@ -41,10 +40,10 @@ interface iAppProps {
     id: string;
     name: string;
     description: string;
-    status: ProductStatus;
+    status: $Enums.ProductStatus;
     price: number;
     images: string[];
-    category: Category;
+    category: $Enums.Category;
     isFeatured: boolean;
   };
 }

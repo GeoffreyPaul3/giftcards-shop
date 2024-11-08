@@ -1,4 +1,3 @@
-export const dynamic = 'force-dynamic';
 
 
 import { EditForm } from "@/app/components/dashboard/EditForm";
