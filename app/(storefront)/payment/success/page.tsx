@@ -1,3 +1,4 @@
+import { unstable_noStore as noStore } from "next/cache";
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -5,6 +6,7 @@ import { Check } from "lucide-react";
 import Link from "next/link";
 
 export default function SuccessRoute() {
+  noStore();
   return (
     <section className="w-full min-h-[80vh] flex items-center justify-center">
       <Card className="w-[350px]">
