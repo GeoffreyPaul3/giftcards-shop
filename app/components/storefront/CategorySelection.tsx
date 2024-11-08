@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
-import all from "@/public/card8.jpg";
-import fashion from "@/public/card12.jpg";
-import retail from "@/public/card9.jpg";
+import all from "@/public/card9.png";
+import fashion from "@/public/card12.png";
+import retail from "@/public/card9.png";
 
 export function CategoriesSelection() {
   return (
