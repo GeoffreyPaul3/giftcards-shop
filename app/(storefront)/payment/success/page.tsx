@@ -1,12 +1,18 @@
 import { unstable_noStore as noStore } from "next/cache";
-
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Check } from "lucide-react";
 import Link from "next/link";
 
+export const getServerSideProps = async () => {
+  noStore(); // Ensure the route is treated as dynamic
+
+  return {
+    props: {}, // No additional props required
+  };
+};
+
 export default function SuccessRoute() {
-  noStore();
   return (
     <section className="w-full min-h-[80vh] flex items-center justify-center">
       <Card className="w-[350px]">
@@ -16,12 +22,9 @@ export default function SuccessRoute() {
           </div>
 
           <div className="mt-3 text-center sm:mt-5 w-full">
-            <h3 className="text-lg leading-6 font-medium">
-              Payment Successfull
-            </h3>
+            <h3 className="text-lg leading-6 font-medium">Payment Successful</h3>
             <p className="mt-2 text-sm text-muted-foreground">
-              Congrats to your purchase. Your payment was succesfull. We hope
-              you enjoy your product.
+              Congratulations on your purchase! Your payment was successful. We hope you enjoy your product.
             </p>
 
             <Button asChild className="w-full mt-5 sm:mt-6">
