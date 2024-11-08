@@ -93,7 +93,7 @@ export default function BannerRoute() {
                   onUploadError={() => {
                     alert("Something went wrong");
                   }}
-                  endpoint="bannerImageRoute"
+                  endpoint="imageUploader"
                 />
               )}
 
