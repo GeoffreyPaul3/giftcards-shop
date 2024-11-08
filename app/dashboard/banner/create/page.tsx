@@ -20,12 +20,12 @@ import { parseWithZod } from "@conform-to/zod";
 import { ChevronLeft } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useActionState, useState } from "react";
-
+import { useState } from "react";
+import { useFormState } from "react-dom";
 
 export default function BannerRoute() {
   const [image, setImages] = useState<string | undefined>(undefined);
-  const [lastResult, action] = useActionState(createBanner, undefined);
+  const [lastResult, action] = useFormState(createBanner, undefined);
 
   const [form, fields] = useForm({
     lastResult,
@@ -87,22 +87,14 @@ export default function BannerRoute() {
                 />
               ) : (
                 <UploadDropzone
-                onClientUploadComplete={(res) => {
-                  console.log(res);  // Inspect the response
-                  if (res && res[0] && res[0].url) {
-                    setImages(res[0].url);  // Set the URL if structure is correct
-                  } else {
-                    alert("Unexpected response structure.");
-                  }
-                }}
-                onUploadError={(error) => {
-                  console.error("Upload failed", error);  // Log error details
-                  alert("Something went wrong. Please try again.");
-                }}
-                endpoint="bannerImageRoute"
-              />
-              
-              
+                  onClientUploadComplete={(res) => {
+                    setImages(res[0].url);
+                  }}
+                  onUploadError={() => {
+                    alert("Something went wrong");
+                  }}
+                  endpoint="bannerImageRoute"
+                />
               )}
 
               <p className="text-red-500">{fields.imageString.errors}</p>

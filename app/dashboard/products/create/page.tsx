@@ -24,11 +24,11 @@ import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { ChevronLeft, XIcon } from "lucide-react";
 import Link from "next/link";
-
+import { useFormState } from "react-dom";
 import { useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
 import { productSchema } from "@/app/lib/zodSchemas";
-import { useActionState, useState } from "react";
+import { useState } from "react";
 
 import Image from "next/image";
 import { categories } from "@/app/lib/categories";
@@ -37,7 +37,7 @@ import { UploadDropzone } from "@/app/lib/uploadthing";
 
 export default function ProductCreateRoute() {
   const [images, setImages] = useState<string[]>([]);
-  const [lastResult, action] = useActionState(createProduct, undefined);
+  const [lastResult, action] = useFormState(createProduct, undefined);
   const [form, fields] = useForm({
     lastResult,
 
@@ -192,17 +192,14 @@ export default function ProductCreateRoute() {
                 </div>
               ) : (
                 <UploadDropzone
-                endpoint="imageUploader"
-                onClientUploadComplete={(res) => {
-                  console.log("Upload complete:", res);
-                  setImages(res.map((r) => r.url));
-                }}
-                onUploadError={(error) => {
-                  console.error("Upload error:", error);
-                  alert("Something went wrong");
-                }}
-              />
-              
+                  endpoint="imageUploader"
+                  onClientUploadComplete={(res) => {
+                    setImages(res.map((r) => r.url));
+                  }}
+                  onUploadError={() => {
+                    alert("Something went wrong");
+                  }}
+                />
               )}
 
               <p className="text-red-500">{fields.images.errors}</p>
