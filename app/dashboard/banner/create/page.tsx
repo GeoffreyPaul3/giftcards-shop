@@ -87,14 +87,22 @@ export default function BannerRoute() {
                 />
               ) : (
                 <UploadDropzone
-                  onClientUploadComplete={(res) => {
-                    setImages(res[0].url);
-                  }}
-                  onUploadError={() => {
-                    alert("Something went wrong");
-                  }}
-                  endpoint="bannerImageRoute"
-                />
+                onClientUploadComplete={(res) => {
+                  console.log(res);  // Inspect the response
+                  if (res && res[0] && res[0].url) {
+                    setImages(res[0].url);  // Set the URL if structure is correct
+                  } else {
+                    alert("Unexpected response structure.");
+                  }
+                }}
+                onUploadError={(error) => {
+                  console.error("Upload failed", error);  // Log error details
+                  alert("Something went wrong. Please try again.");
+                }}
+                endpoint="bannerImageRoute"
+              />
+              
+              
               )}
 
               <p className="text-red-500">{fields.imageString.errors}</p>
