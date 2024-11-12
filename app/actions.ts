@@ -8,15 +8,14 @@ import prisma from "./lib/db";
 import { redis } from "./lib/redis";
 import { Cart } from "./lib/interfaces";
 import { revalidatePath } from "next/cache";
-
-import Stripe from "stripe";
 import { stripe } from "./lib/stripe";
+import Stripe from "stripe";
 
 export async function createProduct(prevState: unknown, formData: FormData) {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 
-  if (!user || user.email !== "jan@alenix.de") {
+  if (!user || user.email !== "geofreypaul40@gmail.com") {
     return redirect("/");
   }
 
@@ -47,12 +46,11 @@ export async function createProduct(prevState: unknown, formData: FormData) {
   redirect("/dashboard/products");
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function editProduct(prevState: any, formData: FormData) {
+export async function editProduct(prevState: unknown, formData: FormData) {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 
-  if (!user || user.email !== "jan@alenix.de") {
+  if (!user || user.email !== "geofreypaul40@gmail.com") {
     return redirect("/");
   }
 
@@ -91,7 +89,7 @@ export async function deleteProduct(formData: FormData) {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 
-  if (!user || user.email !== "jan@alenix.de") {
+  if (!user || user.email !== "geofreypaul40@gmail.com") {
     return redirect("/");
   }
 
@@ -104,12 +102,11 @@ export async function deleteProduct(formData: FormData) {
   redirect("/dashboard/products");
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function createBanner(prevState: any, formData: FormData) {
+export async function createBanner(prevState: unknown, formData: FormData) {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 
-  if (!user || user.email !== "jan@alenix.de") {
+  if (!user || user.email !== "geofreypaul40@gmail.com") {
     return redirect("/");
   }
 
@@ -135,7 +132,7 @@ export async function deleteBanner(formData: FormData) {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 
-  if (!user || user.email !== "jan@alenix.de") {
+  if (!user || user.email !== "geofreypaul40@gmail.com") {
     return redirect("/");
   }
 
@@ -156,8 +153,7 @@ export async function addItem(productId: string) {
     return redirect("/");
   }
 
-  // eslint-disable-next-line prefer-const
-  let cart: Cart | null = await redis.get(`cart-${user.id}`);
+  const cart: Cart | null = await redis.get(`cart-${user.id}`);
 
   const selectedProduct = await prisma.product.findUnique({
     select: {
@@ -227,8 +223,7 @@ export async function delItem(formData: FormData) {
 
   const productId = formData.get("productId");
 
-  // eslint-disable-next-line prefer-const
-  let cart: Cart | null = await redis.get(`cart-${user.id}`);
+  const cart: Cart | null = await redis.get(`cart-${user.id}`);
 
   if (cart && cart.items) {
     const updateCart: Cart = {
@@ -250,8 +245,7 @@ export async function checkOut() {
     return redirect("/");
   }
 
-  // eslint-disable-next-line prefer-const
-  let cart: Cart | null = await redis.get(`cart-${user.id}`);
+  const cart: Cart | null = await redis.get(`cart-${user.id}`);
 
   if (cart && cart.items) {
     const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] =
@@ -273,11 +267,11 @@ export async function checkOut() {
       success_url:
         process.env.NODE_ENV === "development"
           ? "http://localhost:3000/payment/success"
-          : "https://shoe-marshal.vercel.app/payment/success",
+          : "https://giftcards-shop.vercel.app/payment/success",
       cancel_url:
         process.env.NODE_ENV === "development"
           ? "http://localhost:3000/payment/cancel"
-          : "https://shoe-marshal.vercel.app/payment/cancel",
+          : "https://giftcards-shop.vercel.app/payment/cancel",
       metadata: {
         userId: user.id,
       },
