@@ -26,8 +26,7 @@ import { Switch } from "@/components/ui/switch";
 import Image from "next/image";
 
 import { categories } from "@/app/lib/categories";
-import { useState } from "react";
-import { useFormState } from "react-dom";
+import { useActionState, useState } from "react";
 import { editProduct } from "@/app/actions";
 import { useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
@@ -50,7 +49,7 @@ interface iAppProps {
 
 export function EditForm({ data }: iAppProps) {
   const [images, setImages] = useState<string[]>(data.images);
-  const [lastResult, action] = useFormState(editProduct, undefined);
+  const [lastResult, action] = useActionState(editProduct, undefined);
   const [form, fields] = useForm({
     lastResult,
 
