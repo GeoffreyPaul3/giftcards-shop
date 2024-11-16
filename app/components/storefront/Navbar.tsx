@@ -1,8 +1,7 @@
-
 import Link from "next/link";
 import { NavbarLinks } from "./NavbarLinks";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
-import { ShoppingBagIcon } from "lucide-react";
+import { ShoppingBagIcon, Menu } from "lucide-react";
 import { UserDropdown } from "./UserDropdown";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,46 +11,51 @@ import {
 import { redis } from "@/app/lib/redis";
 import { Cart } from "@/app/lib/interfaces";
 import Image from "next/image";
+import { Sheet, SheetTrigger, SheetContent, SheetHeader } from "@/components/ui/sheet";
 
 export async function Navbar() {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 
   const cart: Cart | null = await redis.get(`cart-${user?.id}`);
-
   const total = cart?.items.reduce((sum, item) => sum + item.quantity, 0) || 0;
 
   return (
     <nav className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex items-center justify-between">
+      {/* Logo and Links */}
       <div className="flex items-center">
         <Link href="/">
           <h1 className="text-black font-bold text-xl lg:text-3xl">
             <Image src="/tlogo.png" alt="logo" width={120} height={120} />
           </h1>
         </Link>
-        <NavbarLinks />
+        {/* Hidden on Mobile */}
+        <div className="hidden md:block">
+          <NavbarLinks />
+        </div>
       </div>
 
-      <div className="flex items-center">
-        {user ? (
-          <>
-            <Link href="/bag" className="group p-2 flex items-center mr-2">
-              <ShoppingBagIcon className="h-6 w-6 text-gray-400 group-hover:text-gray-500" />
-              <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
-                {total}
-              </span>
-            </Link>
+      {/* Cart and User Auth */}
+      <div className="flex items-center space-x-4">
+        {/* Cart Link */}
+        <Link href="/bag" className="group p-2 flex items-center">
+          <ShoppingBagIcon className="h-6 w-6 text-gray-400 group-hover:text-gray-500" />
+          <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
+            {total}
+          </span>
+        </Link>
 
-            <UserDropdown
-              email={user.email as string}
-              name={user.given_name as string}
-              userImage={
-                user.picture ?? `https://avatar.vercel.sh/${user.given_name}`
-              }
-            />
-          </>
+        {/* User Dropdown or Sign In / Create Account */}
+        {user ? (
+          <UserDropdown
+            email={user.email as string}
+            name={user.given_name as string}
+            userImage={
+              user.picture ?? `https://avatar.vercel.sh/${user.given_name}`
+            }
+          />
         ) : (
-          <div className="hidden md:flex md:flex-1 md:items-center md:justify-end md:space-x-2">
+          <div className="hidden md:flex space-x-2">
             <Button variant="ghost" asChild>
               <LoginLink>Sign in</LoginLink>
             </Button>
@@ -61,6 +65,42 @@ export async function Navbar() {
             </Button>
           </div>
         )}
+
+        {/* Mobile Menu Trigger */}
+        <div className="md:hidden">
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="ghost">
+                <Menu className="h-6 w-6" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="left" className="w-64">
+              <SheetHeader>
+                {/* Logo in Mobile Menu */}
+                <Link href="/" className="flex items-center mb-6">
+                  <Image src="/tlogo.png" alt="logo" width={120} height={120} />
+                </Link>
+              </SheetHeader>
+
+              {/* Mobile Menu Links */}
+              <div className="space-y-4">
+                <NavbarLinks />
+              </div>
+
+              {/* Sign In / Create Account on Mobile */}
+              {!user && (
+                <div className="mt-6 space-y-2">
+                  <Button variant="ghost" asChild className="w-full">
+                    <LoginLink>Sign in</LoginLink>
+                  </Button>
+                  <Button variant="ghost" asChild className="w-full">
+                    <RegisterLink>Create Account</RegisterLink>
+                  </Button>
+                </div>
+              )}
+            </SheetContent>
+          </Sheet>
+        </div>
       </div>
     </nav>
   );
