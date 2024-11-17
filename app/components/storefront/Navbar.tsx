@@ -82,10 +82,12 @@ export async function Navbar() {
                 </Link>
               </SheetHeader>
 
-              {/* Mobile Menu Links */}
-              <div className="space-y-4">
-                <NavbarLinks />
-              </div>
+              {/* Mobile Menu Links - only show if user is logged in */}
+              {user && (
+                <div className="space-y-4">
+                  <NavbarLinks />
+                </div>
+              )}
 
               {/* Sign In / Create Account on Mobile */}
               {!user && (
