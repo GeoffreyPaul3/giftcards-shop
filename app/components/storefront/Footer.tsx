@@ -1,4 +1,4 @@
-import { Facebook, Instagram, Twitter } from "lucide-react";
+import { SiFacebook, SiInstagram, SiX } from 'react-icons/si'
 import Link from "next/link";
 
 export function Footer() {
@@ -21,11 +21,6 @@ export function Footer() {
                 FAQs
               </Link>
             </li>
-            <li>
-              <Link href="/return-policy" className="hover:text-primary transition duration-300">
-                Returns & Exchanges
-              </Link>
-            </li>
           </ul>
         </div>
 
@@ -43,11 +38,6 @@ export function Footer() {
                 Terms of Service
               </Link>
             </li>
-            <li>
-              <Link href="/privacy" className="hover:text-primary transition duration-300">
-                Privacy Policy
-              </Link>
-            </li>
           </ul>
         </div>
 
@@ -56,13 +46,13 @@ export function Footer() {
           <h3 className="text-sm font-semibold text-gray-900">Follow Us</h3>
           <div className="mt-4 flex space-x-6 text-gray-600">
             <Link href="https://www.facebook.com" className="hover:text-primary transition duration-300" aria-label="Facebook">
-              <Facebook size={20} />
+              <SiFacebook size={20} />
             </Link>
             <Link href="https://www.instagram.com" className="hover:text-primary transition duration-300" aria-label="Instagram">
-              <Instagram size={20} />
+              <SiInstagram size={20} />
             </Link>
             <Link href="https://www.twitter.com" className="hover:text-primary transition duration-300" aria-label="Twitter">
-              <Twitter size={20} />
+              <SiX size={20} />
             </Link>
           </div>
         </div>
