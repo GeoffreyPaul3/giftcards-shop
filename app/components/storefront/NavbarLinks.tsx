@@ -32,10 +32,11 @@ export const navbarLinks = [
   },
 ];
 
-export function NavbarLinks() {
+export function NavbarLinks({ isMobile = false }: { isMobile?: boolean }) {
   const location = usePathname();
+  
   return (
-    <div className="hidden md:flex justify-center items-center gap-x-2 ml-8">
+    <div className={cn(isMobile ? "flex flex-col space-y-4" : "hidden md:flex justify-center items-center gap-x-2 ml-8")}>
       {navbarLinks.map((item) => (
         <Link
           href={item.href}

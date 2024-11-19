@@ -86,7 +86,7 @@ export async function Navbar() {
               {/* Mobile Menu Links - only show if user is logged in */}
               {user && (
                 <div className="space-y-4">
-                  <NavbarLinks />
+                  <NavbarLinks isMobile={true}/>
                 </div>
               )}
 
