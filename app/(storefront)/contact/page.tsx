@@ -22,7 +22,7 @@ export default function Contact() {
 
     // Use EmailJS to send the email
     emailjs
-      .send(process.env.NEXT_EMAILJS_SERVICE_ID!, process.env.NEXT_EMAILJS_TEMPLATE_ID!, formData, process.env.NEXT_EMAILJS_USER_ID!)
+      .send(process.env.NEXT_EMAILJS_SERVICE_ID as string, process.env.NEXT_EMAILJS_TEMPLATE_ID!, formData, process.env.NEXT_EMAILJS_USER_ID!)
       .then(() => {
         setLoading(false);
         toast.success("Message sent! We will get back to you shortly.");
@@ -35,7 +35,7 @@ export default function Contact() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
           <h1 className="text-4xl font-extrabold text-gray-900">Contact Us</h1>

@@ -21,7 +21,7 @@ export async function Navbar() {
   const total = cart?.items.reduce((sum, item) => sum + item.quantity, 0) || 0;
 
   return (
-    <nav className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex items-center justify-between">
+    <nav className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 mb-2 flex items-center justify-between border-b">
       {/* Logo and Links */}
       <div className="flex items-center">
         <Link href="/">
@@ -71,16 +71,17 @@ export async function Navbar() {
           <Sheet>
             <SheetTrigger asChild>
               <Button variant="ghost">
-                <Menu className="h-6 w-6" />
+                <Menu className="h-8 w-8" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="left" className="w-64">
+            <SheetContent side="left" className="w-64 bg-white overflow-y-auto">
               <SheetHeader>
                 {/* Logo in Mobile Menu */}
                 <Link href="/" className="flex items-center mb-6">
                   <Image src="/tlogo.png" alt="logo" width={120} height={120} />
                 </Link>
               </SheetHeader>
+
 
               {/* Mobile Menu Links - only show if user is logged in */}
               {user && (

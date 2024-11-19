@@ -3,22 +3,26 @@ import React from "react";
 
 export default function Terms() {
   return (
-    <div className="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
-      <h1 className="text-4xl font-bold text-gray-900 text-center">Terms of Service</h1>
-      <p className="mt-4 text-lg text-gray-600">
+    <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 overflow-x-hidden">
+      <h1 className="text-4xl font-extrabold text-gray-900 text-center">Terms of Service</h1>
+      <p className="mt-6 text-lg text-gray-600 text-center">
         Please read these Terms of Service carefully before using our platform. These terms govern your access to and use of our GiftCards platform, including purchasing, redeeming, and managing your digital gift cards.
       </p>
-      <Tabs className="mt-8">
-        <TabsList className="flex justify-start space-x-4">
-          <TabsTrigger value="general" className="text-lg font-medium text-gray-900">General Terms</TabsTrigger>
-          <TabsTrigger value="payments" className="text-lg font-medium text-gray-900">Payments</TabsTrigger>
-          <TabsTrigger value="privacy" className="text-lg font-medium text-gray-900">Privacy</TabsTrigger>
-          <TabsTrigger value="redemption" className="text-lg font-medium text-gray-900">Redemption</TabsTrigger>
-          <TabsTrigger value="security" className="text-lg font-medium text-gray-900">Security</TabsTrigger>
+
+      {/* Tabs Section */}
+      <Tabs className="mt-12">
+        {/* Tabs List: Horizontal scroll enabled for mobile */}
+        <TabsList className="flex justify-start space-x-4 overflow-x-auto pb-2">
+          <TabsTrigger value="general" className="text-lg font-medium text-gray-900 whitespace-nowrap">General Terms</TabsTrigger>
+          <TabsTrigger value="payments" className="text-lg font-medium text-gray-900 whitespace-nowrap">Payments</TabsTrigger>
+          <TabsTrigger value="privacy" className="text-lg font-medium text-gray-900 whitespace-nowrap">Privacy</TabsTrigger>
+          <TabsTrigger value="redemption" className="text-lg font-medium text-gray-900 whitespace-nowrap">Redemption</TabsTrigger>
+          <TabsTrigger value="security" className="text-lg font-medium text-gray-900 whitespace-nowrap">Security</TabsTrigger>
         </TabsList>
 
+        {/* Tabs Content */}
         <TabsContent value="general">
-          <div className="mt-4 text-gray-700 space-y-4">
+          <div className="mt-6 text-gray-700 space-y-6">
             <h3 className="text-xl font-semibold text-gray-800">General Terms</h3>
             <p>
               By accessing or using our platform, you agree to abide by these Terms of Service. If you do not agree with any part of these terms, you should not use our platform.
@@ -30,7 +34,7 @@ export default function Terms() {
         </TabsContent>
 
         <TabsContent value="payments">
-          <div className="mt-4 text-gray-700 space-y-4">
+          <div className="mt-6 text-gray-700 space-y-6">
             <h3 className="text-xl font-semibold text-gray-800">Payments</h3>
             <p>
               All payments are final and non-refundable, except as required by law. When making a payment for a gift card, you agree to provide accurate billing information and authorize us to charge your selected payment method.
@@ -42,7 +46,7 @@ export default function Terms() {
         </TabsContent>
 
         <TabsContent value="privacy">
-          <div className="mt-4 text-gray-700 space-y-4">
+          <div className="mt-6 text-gray-700 space-y-6">
             <h3 className="text-xl font-semibold text-gray-800">Privacy</h3>
             <p>
               Your privacy is of utmost importance to us. We collect and store personal data only as necessary to process your transactions and provide you with the best possible user experience.
@@ -54,7 +58,7 @@ export default function Terms() {
         </TabsContent>
 
         <TabsContent value="redemption">
-          <div className="mt-4 text-gray-700 space-y-4">
+          <div className="mt-6 text-gray-700 space-y-6">
             <h3 className="text-xl font-semibold text-gray-800">Redemption</h3>
             <p>
               Gift cards purchased on our platform can be redeemed at participating merchants as specified in the card&apos;s terms and conditions. Please ensure the correct merchant and redemption code before using your gift card.
@@ -66,7 +70,7 @@ export default function Terms() {
         </TabsContent>
 
         <TabsContent value="security">
-          <div className="mt-4 text-gray-700 space-y-4">
+          <div className="mt-6 text-gray-700 space-y-6">
             <h3 className="text-xl font-semibold text-gray-800">Security</h3>
             <p>
               We use industry-standard encryption and security measures to protect your personal information and payment details during transactions. However, we recommend that you keep your account credentials and gift card codes secure to prevent unauthorized use.
