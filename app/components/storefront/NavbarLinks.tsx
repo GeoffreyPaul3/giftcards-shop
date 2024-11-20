@@ -30,6 +30,11 @@ export const navbarLinks = [
     name: "Entertainment",
     href: "/products/entertainment",
   },
+  {
+    id: 5,
+    name: "My Orders",
+    href: "/my-orders",
+  },
 ];
 
 export function NavbarLinks({ isMobile = false }: { isMobile?: boolean }) {
