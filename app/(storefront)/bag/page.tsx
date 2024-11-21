@@ -1,5 +1,3 @@
-export const dynamic = 'force-dynamic';
-
 
 import { checkOut, delItem } from "@/app/actions";
 import { CheckoutButton, DeleteItem } from "@/app/components/SubmitButtons";
