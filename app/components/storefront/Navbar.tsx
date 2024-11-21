@@ -56,11 +56,11 @@ export async function Navbar() {
           />
         ) : (
           <div className="hidden md:flex space-x-2">
-            <Button variant="ghost" asChild>
+            <Button variant="outline" asChild>
               <LoginLink>Sign in</LoginLink>
             </Button>
             <span className="h-6 w-px bg-gray-200"></span>
-            <Button variant="ghost" asChild>
+            <Button asChild>
               <RegisterLink>Create Account</RegisterLink>
             </Button>
           </div>

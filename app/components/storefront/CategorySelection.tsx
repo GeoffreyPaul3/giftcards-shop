@@ -42,7 +42,7 @@ export function CategoriesSelection() {
           <Image
             src={fashion}
             alt="Products for fashion Image"
-            className="object-bottom object-cover sm:absolute sm:inset-0 sm:w-full sm:h-full transition-transform duration-500 group-hover:scale-110"
+            className="object-cover sm:absolute sm:inset-0 sm:w-full sm:h-full transition-transform duration-500 group-hover:scale-110"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black opacity-55 sm:absolute sm:inset-0 transition-opacity duration-300 group-hover:opacity-75" />
           <div className="p-6 absolute bottom-0 flex items-end sm:absolute sm:inset-0">
@@ -58,7 +58,7 @@ export function CategoriesSelection() {
           <Image
             src={retail}
             alt="Retail product image"
-            className="object-bottom object-cover sm:absolute sm:inset-0 sm:w-full sm:h-full transition-transform duration-500 group-hover:scale-110"
+            className="object-cover sm:absolute sm:inset-0 sm:w-full sm:h-full transition-transform duration-500 group-hover:scale-110"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black opacity-55 sm:absolute sm:inset-0 transition-opacity duration-300 group-hover:opacity-75" />
           <div className="p-6 absolute bottom-0 flex items-end sm:absolute sm:inset-0">
