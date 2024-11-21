@@ -12,6 +12,7 @@ import { redis } from "@/app/lib/redis";
 import { Cart } from "@/app/lib/interfaces";
 import Image from "next/image";
 import { Sheet, SheetTrigger, SheetContent, SheetHeader } from "@/components/ui/sheet";
+import { Separator } from "@/components/ui/separator";
 
 export async function Navbar() {
   const { getUser } = getKindeServerSession();
@@ -81,6 +82,7 @@ export async function Navbar() {
                   <Image src="/tlogo.png" alt="logo" width={120} height={120} />
                 </Link>
               </SheetHeader>
+              <Separator className="border border-gray-50" />
 
 
               {/* Mobile Menu Links - only show if user is logged in */}
