@@ -6,7 +6,9 @@ import { headers } from "next/headers";
 export async function POST(req: Request) {
   const body = await req.text();
 
-  const signature = (await headers()).get("Stripe-Signature") as string;
+  // Await headers to resolve the Promise<ReadonlyHeaders>
+  const headersResult = await headers();
+  const signature = headersResult.get("Stripe-Signature") as string;
 
   let event;
 
@@ -17,7 +19,7 @@ export async function POST(req: Request) {
       process.env.STRIPE_SECRET_WEBHOOK as string
     );
   } catch (error: unknown) {
-    console.error(error); // Optional: log the error for debugging purposes
+    console.error(error);  // Optional: log the error
     return new Response("Webhook Error", { status: 400 });
   }
 

@@ -1,6 +1,4 @@
-
-
-import prisma from "@/app/lib/db";
+ import prisma from "@/app/lib/db";
 import {
   Card,
   CardContent,
