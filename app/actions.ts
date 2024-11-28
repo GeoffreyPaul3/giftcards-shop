@@ -8,8 +8,8 @@ import prisma from "./lib/db";
 import { redis } from "./lib/redis";
 import { Cart } from "./lib/interfaces";
 import { revalidatePath } from "next/cache";
-import { stripe } from "./lib/stripe";
-import Stripe from "stripe";
+import { LevelData } from "@/types/paychangu";
+import crypto from "crypto";
 
 export async function createProduct(prevState: unknown, formData: FormData) {
   const { getUser } = getKindeServerSession();
@@ -240,6 +240,10 @@ export async function delItem(formData: FormData) {
 export async function checkOut() {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const firstName = (user as any).firstName;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const lastName = (user as any).lastName;
 
   if (!user) {
     return redirect("/");
@@ -248,35 +252,53 @@ export async function checkOut() {
   const cart: Cart | null = await redis.get(`cart-${user.id}`);
 
   if (cart && cart.items) {
-    const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] =
-      cart.items.map((item) => ({
-        price_data: {
-          currency: "usd",
-          unit_amount: item.price * 100,
-          product_data: {
-            name: item.name,
-            images: [item.imageString],
-          },
-        },
-        quantity: item.quantity,
-      }));
+    // Generate a random transaction reference to identify the transaction
+    const tx_ref = crypto.randomUUID();
 
-    const session = await stripe.checkout.sessions.create({
-      mode: "payment",
-      line_items: lineItems,
-      success_url:
+    // Prepare line items to match Paychangu requirements
+    const amountInUSD = cart.items.reduce(
+      (total, item) => total + item.price * item.quantity,
+      0
+    );
+
+    // Set your custom exchange rate for USD to MWK
+    const customExchangeRate = 2500;
+
+    // Convert the amount from USD to MWK using your custom rate
+    const amountInMWK = amountInUSD * customExchangeRate;
+
+    const data: LevelData = {
+      amount: amountInMWK, // Use the manually set MWK amount
+      currency: "MWK",
+      email: user.email!,
+      first_name: firstName,
+      last_name: lastName,
+      callback_url:
         process.env.NODE_ENV === "development"
           ? "http://localhost:3000/payment/success"
-          : "https://giftcards-shop.vercel.app/payment/success",
-      cancel_url:
+          : "https://giftcards-shop.app/payment/success",
+      return_url:
         process.env.NODE_ENV === "development"
           ? "http://localhost:3000/payment/cancel"
-          : "https://giftcards-shop.vercel.app/payment/cancel",
-      metadata: {
-        userId: user.id,
+          : "https://giftcards-shop.app/payment/cancel",
+      tx_ref,
+    };
+
+    // Send a fetch request to the PayChangu API using your secret key and the data
+    const response = await fetch("https://api.paychangu.com/payment", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${process.env.PAYCHANGU_SECRET_KEY}`,
       },
+      body: JSON.stringify(data),
     });
 
-    return redirect(session.url as string);
+    // Get the checkout URL from the response and redirect to it
+    const text = await response.text();
+    const checkoutUrl = JSON.parse(text).data.checkout_url;
+
+    redirect(checkoutUrl);
   }
 }
