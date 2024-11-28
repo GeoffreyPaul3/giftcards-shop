@@ -17,6 +17,7 @@ export default function SuccessRoute() {
     const status = urlParams.get("status");  // Either 'success' or 'failed'
     const txRef = urlParams.get("tx_ref");   // Transaction reference ID
 
+     console.log("Status:", status, "TxRef:", txRef); 
     if (status && txRef) {
       if (status === "success") {
         setIsSuccess(true);
@@ -28,7 +29,11 @@ export default function SuccessRoute() {
         setPaymentMessage("Something went wrong with your payment. Please try again.");
       }
     }
+
+  
   }, []);
+
+  
 
   return (
     <section className="w-full min-h-[80vh] flex items-center justify-center">
@@ -45,10 +50,10 @@ export default function SuccessRoute() {
 
           <div className="mt-3 text-center sm:mt-5 w-full">
             <h3 className="text-lg leading-6 font-medium">
-              {paymentStatus || "Processing payment..."}
+              {paymentStatus}
             </h3>
             <p className="mt-2 text-sm text-muted-foreground">
-              {paymentMessage || "We are processing your payment. Please wait."}
+              {paymentMessage}
             </p>
 
             <Button asChild className="w-full mt-5 sm:mt-6">
