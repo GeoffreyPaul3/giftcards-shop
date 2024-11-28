@@ -276,11 +276,11 @@ export async function checkOut() {
       callback_url:
         process.env.NODE_ENV === "development"
           ? "http://localhost:3000/payment/success"
-          : "https://giftcards-shop.app/payment/success",
+          : "https://giftcards-shop.vercel.app/payment/success",
       return_url:
         process.env.NODE_ENV === "development"
           ? "http://localhost:3000/payment/cancel"
-          : "https://giftcards-shop.app/payment/cancel",
+          : "https://giftcards-shop.vercel.app/payment/cancel",
       tx_ref,
     };
 
