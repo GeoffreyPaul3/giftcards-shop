@@ -275,8 +275,8 @@ export async function checkOut() {
       last_name: lastName,
       callback_url:
         process.env.NODE_ENV === "development"
-          ? "http://localhost:3000/payment/success"
-          : "https://giftcards-shop.vercel.app/payment/success",
+          ? "http://localhost:3000/payments"
+          : "https://giftcards-shop.vercel.app/payments",
       return_url:
         process.env.NODE_ENV === "development"
           ? "http://localhost:3000/payment/cancel"
