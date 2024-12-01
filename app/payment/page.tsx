@@ -1,10 +1,7 @@
-import PaymentConfirmation from "./components/PaymentComfirmation";
-
+import PaymentConfirmation from './components/PaymentComfirmation';
 
 type Props = {
   searchParams: {
-    // userId: string;
-    // subscriptionId: string;
     tx_ref: string;
   };
 };
@@ -16,5 +13,7 @@ const Page = async ({ searchParams }: Props) => {
     </div>
   );
 };
+
+// If searchParams is coming from URL or query params, Next.js expects you to retrieve it accordingly.
 
 export default Page;
