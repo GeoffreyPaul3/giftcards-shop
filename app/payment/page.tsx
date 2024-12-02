@@ -1,12 +1,11 @@
 import PaymentConfirmation from './components/PaymentComfirmation';
 
-type Props = {
+interface Props {
   searchParams?: { tx_ref: string };
-};
+}
 
-const Page = async ({ searchParams }: Props) => {
+const Page = ({ searchParams }: Props) => {
   if (!searchParams?.tx_ref) {
-    // Handle missing or undefined searchParams
     throw new Error('Transaction reference is missing.');
   }
 
