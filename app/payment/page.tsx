@@ -1,22 +1,19 @@
 import { Metadata } from 'next';
 import PaymentConfirmation from './components/PaymentComfirmation';
 
-interface Props {
-  searchParams?: { tx_ref: string };
-}
-
 export const metadata: Metadata = {
   title: 'Payment Confirmation',
 };
 
-const Page = ({ searchParams }: Props) => {
-  if (!searchParams || !searchParams.tx_ref) {
+const Page = ({ searchParams }: { searchParams?: { tx_ref?: string } }) => {
+  if (!searchParams?.tx_ref) {
     throw new Error('Transaction reference is missing.');
   }
 
   return (
     <div className="mt-20">
-      <PaymentConfirmation searchParams={searchParams} />
+      {/* Type assertion ensures tx_ref is passed as a non-optional string */}
+      <PaymentConfirmation searchParams={{ tx_ref: searchParams.tx_ref }} />
     </div>
   );
 };
