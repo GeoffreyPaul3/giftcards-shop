@@ -1,12 +1,12 @@
 import PaymentConfirmation from './components/PaymentComfirmation';
 
 type Props = {
-  searchParams: Promise<{ tx_ref: string }> | { tx_ref: string };
+  searchParams: { tx_ref: string } | Promise<{ tx_ref: string }>;
 };
 
 const Page = async ({ searchParams }: Props) => {
-  // Ensure searchParams is resolved correctly if it's a Promise
-  const resolvedSearchParams = await searchParams;
+  // Await searchParams if it is a Promise
+  const resolvedSearchParams = searchParams instanceof Promise ? await searchParams : searchParams;
 
   return (
     <div className="mt-20">
@@ -16,3 +16,5 @@ const Page = async ({ searchParams }: Props) => {
 };
 
 export default Page;
+
+
