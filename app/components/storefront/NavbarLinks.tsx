@@ -26,6 +26,11 @@ export const navbarLinks = [
     href: "/products/retail",
   },
   {
+    id: 3,
+    name: "Wallets",
+    href: "/products/wallet",
+  },
+  {
     id: 4,
     name: "Entertainment",
     href: "/products/entertainment",

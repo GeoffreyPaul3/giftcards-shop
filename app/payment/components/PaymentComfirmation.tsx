@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useEffect, useState } from "react";
 import { useSearchParams} from "next/navigation";
 import axios from "axios";
@@ -20,22 +21,7 @@ const PaymentConfirmation = ({}: Props) => {
     "loading"
   );
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const processPayment = async (paymentData: any) => {
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { data } = await axios.post(
-        `${process.env.NEXT_PUBLIC_URL}api/subscriptions`,
-        {
-          paymentData,
-        }
-      );
-      setStatus("success");
-    } catch (error) {
-      console.error("Error in processPayment:", error);
-      setStatus("failed");
-    }
-  };
+
 
   useEffect(() => {
     const handlePaymentCallBack = async () => {
@@ -61,7 +47,8 @@ const PaymentConfirmation = ({}: Props) => {
           );
 
           if (data.status === "success") {
-            await processPayment({});
+            console.log("Payment success")
+            setStatus("success")
           } else {
             console.error("Payment verification failed.");
             setStatus("failed");

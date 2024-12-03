@@ -1,35 +1,31 @@
-"use client";
-import React from "react";
-import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { XCircle } from "lucide-react";
+import Link from "next/link";
 
 const PaymentFailed: React.FC = () => {
-  const router = useRouter();
+ 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen px-4 py-8">
-      <div className="bg-white w-full max-w-4xl mx-auto p-8 flex flex-col lg:flex-row items-center">
-        <div className="lg:w-1/2 mb-8 lg:mb-0 lg:mr-8 text-center lg:text-left">
-          <h2 className="text-2xl font-semibold mb-2">Payment Failed</h2>
-          <p className="text-gray-600 mb-6">
-            Payment failed. Please try again or contact support.
-          </p>
+    <section className="w-full min-h-[80vh] flex items-center justify-center">
+    <Card className="w-[350px] shadow-lg hover:shadow-xl transition-shadow duration-500">
+      <div className="p-6">
+        <div className="w-full flex justify-center">
+          <XCircle className="w-12 h-12 rounded-full bg-red-500/30 text-red-500 p-2" />
+        </div>
 
-          <div className="flex justify-center lg:justify-start space-x-4">
-            {/* <button className="bg-main text-white py-2 px-4 rounded-lg hover:bg-gray-100 transition">
-              Back Home
-            </button> */}
-            <button
-              className="bg-main text-white py-2 px-4 rounded-lg hover:bg-main transition"
-              onClick={() => router.push("/dashboard")}
-            >
-              Back Home
-            </button>
-            <button className="border border-gray-400 text-gray-600 py-2 px-4 rounded-lg hover:bg-gray-100 transition">
-              Contact Support
-            </button>
-          </div>
+        <div className="mt-3 text-center sm:mt-5 w-full">
+          <h3 className="text-lg leading-6 font-medium">Payment Failed</h3>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Something went wrong with your payment. You havent been charged.
+            Please try again
+          </p>
+          <Button asChild className="w-full mt-5 sm:mt-6">
+            <Link href="/bag">Back to Homepage</Link>
+          </Button>
         </div>
       </div>
-    </div>
+    </Card>
+  </section>
   );
 };
 
