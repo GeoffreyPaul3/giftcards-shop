@@ -5,12 +5,8 @@ import axios from "axios";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
-
-  
+  res: NextApiResponse  
 ) 
-
-
 {
   console.log("error")
   if (req.method !== "GET") {
