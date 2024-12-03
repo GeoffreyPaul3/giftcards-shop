@@ -7,13 +7,11 @@ import Spinner from "@/app/components/Spinner";
 import PaymentSuccess from "./PaymentSuccess";
 import PaymentFailed from "./PaymentFailed";
 
-type Props = {
-  searchParams: {
-    tx_ref: string;
-  };
-};
+interface PaymentConfirmationProps {
+  tx_ref: string;
+}
 
-const PaymentConfirmation = ({}: Props) => {
+const PaymentConfirmation = ({ }: PaymentConfirmationProps) => {
   const params = useSearchParams();
   const [status, setStatus] = useState<"loading" | "success" | "failed">(
     "loading"
