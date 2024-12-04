@@ -16,8 +16,8 @@ const PaymentFailed: React.FC = () => {
         <div className="mt-3 text-center sm:mt-5 w-full">
           <h3 className="text-lg leading-6 font-medium">Payment Failed</h3>
           <p className="mt-2 text-sm text-muted-foreground">
-            Something went wrong with your payment. You havent been charged.
-            Please try again
+            Your payment did not go through. You have not been billed.
+            Kindly try again.
           </p>
           <Button asChild className="w-full mt-5 sm:mt-6">
             <Link href="/bag">Back to Homepage</Link>

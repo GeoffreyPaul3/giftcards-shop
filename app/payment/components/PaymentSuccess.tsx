@@ -18,10 +18,9 @@ const PaymentSuccess: React.FC = () => {
               Payment Successfull
             </h3>
             <p className="mt-2 text-sm text-muted-foreground">
-              Congrats to your purchase. Your payment was succesfull. We hope
-              you enjoy your product.
+              Congrats on your purchase. Your payment was succesfully processed. We hope
+              you enjoy the product.
             </p>
-
             <Button asChild className="w-full mt-5 sm:mt-6">
               <Link href="/my-orders">View Your Order</Link>
             </Button>
