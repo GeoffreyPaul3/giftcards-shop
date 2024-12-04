@@ -1,4 +1,4 @@
-import { SiFacebook, SiInstagram, SiX } from 'react-icons/si'
+import { SiFacebook, SiInstagram, SiX } from 'react-icons/si';
 import Link from "next/link";
 
 export function Footer() {
@@ -45,13 +45,13 @@ export function Footer() {
         <div>
           <h3 className="text-sm font-semibold text-gray-900">Follow Us</h3>
           <div className="mt-4 flex space-x-6 text-gray-600">
-            <Link href="https://www.facebook.com" className="hover:text-primary transition duration-300" aria-label="Facebook">
+            <Link href="https://www.facebook.com/profile.php?id=61568004368033" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition duration-300" aria-label="Facebook">
               <SiFacebook size={20} />
             </Link>
-            <Link href="https://www.instagram.com" className="hover:text-primary transition duration-300" aria-label="Instagram">
+            <Link href="https://www.instagram.com/tconnect.mw/profilecard/?igsh=am80OWR6OWZ0MGlp" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition duration-300" aria-label="Instagram">
               <SiInstagram size={20} />
             </Link>
-            <Link href="https://www.twitter.com" className="hover:text-primary transition duration-300" aria-label="Twitter">
+            <Link href="https://x.com/tconnect01?t=cDVL2qQ0ctusyeB7O6onpw&s=09" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition duration-300" aria-label="Twitter">
               <SiX size={20} />
             </Link>
           </div>

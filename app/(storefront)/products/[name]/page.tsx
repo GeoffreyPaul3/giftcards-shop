@@ -73,6 +73,7 @@ async function getData(productCategory: string) {
         data: data as Product[],
       };
     }
+
     case "entertainment": {
       const data = await prisma.product.findMany({
         where: {
@@ -93,6 +94,7 @@ async function getData(productCategory: string) {
         data: data as Product[],
       };
     }
+    
     default: {
       return notFound();
     }
