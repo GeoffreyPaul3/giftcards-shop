@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
 import { useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
 import { ChevronLeft } from "lucide-react";
@@ -26,6 +27,8 @@ import { useActionState, useState } from "react";
 export default function BannerRoute() {
   const [image, setImages] = useState<string | undefined>(undefined);
   const [lastResult, action] = useActionState(createBanner, undefined);
+
+  const { toast } = useToast();
 
   const [form, fields] = useForm({
     lastResult,
@@ -91,7 +94,11 @@ export default function BannerRoute() {
                     setImages(res[0].url);
                   }}
                   onUploadError={() => {
-                    alert("Something went wrong");
+                    toast({
+                      title: "Upload Failed",
+                      description: "Something went wrong",
+                      variant: "destructive",
+                    });;
                   }}
                   endpoint="bannerImageRoute"
                 />

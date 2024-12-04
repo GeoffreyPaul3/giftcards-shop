@@ -2,10 +2,19 @@
 
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
-// Updated FAQ data with your provided questions and answers
-const faqData = [
+
+
+interface FaqItem {
+  question: string;
+  answer: string;
+}
+
+
+const faqData: FaqItem[] = [
   { question: "What is an online gift card?", answer: "An online gift card is a digital version of a physical gift card. It can be sent via email, text message, or through a retailer’s app, and can be used for online purchases at the associated retailer or platform." },
   { question: "How do I use an online gift card?", answer: "To use an online gift card, you typically enter the card number and PIN during the checkout process on the retailer's website. Some online gift cards can also be linked to your account for easier future use." },
   { question: "Can I buy an online gift card without a physical card?", answer: "Yes, online gift cards are digital and do not require a physical card. You can purchase them through a retailer's website or third-party services." },
@@ -28,35 +37,63 @@ const faqData = [
   { question: "Can I use my online gift card for a different retailer or website?", answer: "No, most gift cards are retailer-specific and cannot be used on different platforms." },
 ];
 
-export default function FAQ() {
-  const [search, setSearch] = useState("");
+const FaqPage = () => {
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [expanded, setExpanded] = useState<string[]>([]);
+  const { toast } = useToast();
 
-  const filteredFaqs = faqData.filter((faq) =>
-    faq.question.toLowerCase().includes(search.toLowerCase())
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const toggleAccordion = (index: number) => {
+    setExpanded((prev) =>
+      prev.includes(index.toString())
+        ? prev.filter((item) => item !== index.toString())
+        : [...prev, index.toString()]
+    );
+  };
+
+  const filteredFaqData = faqData.filter((item) =>
+    item.question.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
-    <div className="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
-      <h1 className="text-3xl font-bold text-gray-900">Frequently Asked Questions</h1>
-      <div className="mt-6">
+    <div>
+      <div className="search-box">
         <Input
-          placeholder="Search FAQs..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          value={searchTerm}
+          onChange={handleSearch}
+          placeholder="Search for an answer..."
+          className="mb-4"
         />
       </div>
-      <Accordion className="mt-8" type="multiple">
-        {filteredFaqs.length > 0 ? (
-          filteredFaqs.map((faq, index) => (
-            <AccordionItem value={`item-${index}`} key={index}>
-              <AccordionTrigger>{faq.question}</AccordionTrigger>
-              <AccordionContent>{faq.answer}</AccordionContent>
-            </AccordionItem>
-          ))
-        ) : (
-          <p>No FAQs match your search.</p>
-        )}
+
+      <Accordion type="multiple" value={expanded}>
+        {filteredFaqData.map((faq, index) => (
+          <AccordionItem key={index} value={index.toString()}>
+            <AccordionTrigger onClick={() => toggleAccordion(index)}>
+              {faq.question}
+            </AccordionTrigger>
+            <AccordionContent>
+              <p>{faq.answer}</p>
+            </AccordionContent>
+          </AccordionItem>
+        ))}
       </Accordion>
+
+      <div className="mt-4">
+      <Button onClick={() => toast({ variant:"destructive", 
+        description: "More questions and answers will be added soon!",
+        title: "Update Coming Soon",
+         })}>
+        Add Question
+     </Button>
+
+      </div>
     </div>
   );
-}
+};
+
+export default FaqPage;

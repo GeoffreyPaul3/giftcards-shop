@@ -33,6 +33,7 @@ import { parseWithZod } from "@conform-to/zod";
 import { productSchema } from "@/app/lib/zodSchemas";
 import { type $Enums } from "@prisma/client";
 import { UploadDropzone } from "@/app/lib/uploadthing";
+import { useToast } from "@/hooks/use-toast";
 
 interface iAppProps {
   data: {
@@ -60,6 +61,8 @@ export function EditForm({ data }: iAppProps) {
     shouldValidate: "onBlur",
     shouldRevalidate: "onInput",
   });
+
+  const { toast } = useToast();
 
   const handleDelete = (index: number) => {
     setImages(images.filter((_, i) => i !== index));
@@ -209,7 +212,11 @@ export function EditForm({ data }: iAppProps) {
                     setImages(res.map((r) => r.url));
                   }}
                   onUploadError={() => {
-                    alert("Something went wrong");
+                    toast({
+                      title: "Upload Failed",
+                      description: "Something went wrong",
+                      variant: "destructive",
+                    });
                   }}
                 />
               )}

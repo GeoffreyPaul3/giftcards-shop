@@ -33,6 +33,7 @@ import Image from "next/image";
 import { categories } from "@/app/lib/categories";
 import { SubmitButton } from "@/app/components/SubmitButtons";
 import { UploadDropzone } from "@/app/lib/uploadthing";
+import { useToast } from "@/hooks/use-toast";
 
 export default function ProductCreateRoute() {
   const [images, setImages] = useState<string[]>([]);
@@ -47,6 +48,8 @@ export default function ProductCreateRoute() {
     shouldValidate: "onBlur",
     shouldRevalidate: "onInput",
   });
+
+  const { toast } = useToast();
 
   const handleDelete = (index: number) => {
     setImages(images.filter((_, i) => i !== index));
@@ -196,7 +199,11 @@ export default function ProductCreateRoute() {
                     setImages(res.map((r) => r.url));
                   }}
                   onUploadError={() => {
-                    alert("Something went wrong");
+                    toast({
+                      title: "Upload Failed",
+                      description: "Something went wrong",
+                      variant: "destructive",
+                    });;
                   }}
                 />
               )}
