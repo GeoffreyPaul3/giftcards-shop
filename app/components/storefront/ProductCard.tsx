@@ -22,7 +22,7 @@ interface iAppProps {
 
 export function ProductCard({ item }: iAppProps) {
   return (
-    <div className="rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 bg-white dark:bg-gray-800 overflow-hidden">
+    <div className="rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 bg-white dark:bg-gray-800 overflow-hidden border border-gray-300 dark:border-gray-700">
       {/* Carousel */}
       <div className="relative w-full">
         <Carousel className="w-full">
@@ -50,7 +50,9 @@ export function ProductCard({ item }: iAppProps) {
       <div className="p-4">
         {/* Product Name & Price */}
         <div className="flex justify-between items-center mb-2">
-          <h1 className="font-semibold text-lg text-gray-900 dark:text-gray-100">{item.name}</h1>
+          <h1 className="font-semibold text-lg text-gray-900 dark:text-gray-100">
+            {item.name}
+          </h1>
           <h3 className="bg-primary/10 text-primary px-3 py-1 rounded-md text-xs font-medium">
             ${item.price.toFixed(2)}
           </h3>
@@ -73,7 +75,7 @@ export function ProductCard({ item }: iAppProps) {
 
 export function LoadingProductCard() {
   return (
-    <div className="rounded-lg shadow-lg bg-white dark:bg-gray-800 p-4 animate-pulse">
+    <div className="rounded-lg shadow-lg bg-white dark:bg-gray-800 p-4 animate-pulse border border-gray-300 dark:border-gray-700">
       <Skeleton className="w-full h-[330px] rounded-lg" />
       <div className="flex flex-col mt-4 space-y-2">
         <Skeleton className="h-4 w-3/4" />
