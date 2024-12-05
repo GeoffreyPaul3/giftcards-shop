@@ -1,37 +1,42 @@
 "use client";
 
 import React, { useState } from "react";
-import emailjs from "emailjs-com";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import axios from "axios";
 import { toast } from "react-hot-toast";
 
 export default function Contact() {
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
 
     const formData = {
-      name: (e.currentTarget.elements.namedItem("name") as HTMLInputElement).value,
+      firstName: (e.currentTarget.elements.namedItem("name") as HTMLInputElement).value,
       email: (e.currentTarget.elements.namedItem("email") as HTMLInputElement).value,
       message: (e.currentTarget.elements.namedItem("message") as HTMLTextAreaElement).value,
     };
 
-    // Use EmailJS to send the email
-    emailjs
-      .send(process.env.NEXT_EMAILJS_SERVICE_ID as string, process.env.NEXT_EMAILJS_TEMPLATE_ID!, formData, process.env.NEXT_EMAILJS_USER_ID!)
-      .then(() => {
-        setLoading(false);
-        toast.success("Message sent! We will get back to you shortly.");
-      })
-      .catch((error) => {
-        setLoading(false);
-        toast.error("Failed to send message. Please try again.");
-        console.error("Error sending email:", error);
+    try {
+      const response = await axios.post("/api/send", {
+        firstName: formData.firstName,
+        email: formData.email,
       });
+
+      if (response.status === 200) {
+        toast.success("Message sent! We will get back to you shortly.");
+      } else {
+        throw new Error("Failed to send message");
+      }
+    } catch (error) {
+      toast.error("Failed to send message. Please try again.");
+      console.error("Error sending email:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -40,7 +45,7 @@ export default function Contact() {
         <div className="text-center">
           <h1 className="text-4xl font-extrabold text-gray-900">Contact Us</h1>
           <p className="mt-2 text-sm text-gray-600">
-            Have any questions or concerns? Feel free to reach out. We&apos;re here to help!
+            Have any questions or concerns? Feel free to reach out. We're here to help!
           </p>
         </div>
         <form
@@ -105,3 +110,4 @@ export default function Contact() {
     </div>
   );
 }
+

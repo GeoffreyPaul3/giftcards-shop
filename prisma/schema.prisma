@@ -41,6 +41,8 @@ model Order {
   status    String   @default("pending")
   amount    Int
   userId    String?
+  transactionId  String?
+  paymentMethod String? 
   createdAt DateTime @default(now())
   User      User?    @relation(fields: [userId], references: [id])
 }
