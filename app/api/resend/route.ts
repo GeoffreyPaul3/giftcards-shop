@@ -18,10 +18,10 @@ export async function POST(req: Request) {
 
     // Send the email using Resend API
     const data = await resend.emails.send({
-      from: 'tconnect <contact@tconnect.store>', // Your sender address
+      from: 'tconnect <contact@tconnect.store>',
       to: [email], // Recipient's email
-      subject: 'Welcome to Our Service!', // Email subject
-      react: EmailTemplate({ firstName }), // React-based email template
+      subject: 'Welcome to Our Service!',
+      react: EmailTemplate({ firstName }),
     });
 
     // Return the success response
