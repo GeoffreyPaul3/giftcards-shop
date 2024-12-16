@@ -6,19 +6,17 @@ export async function POST(req: NextRequest) {
   const body = await req.json();
   const signature = req.headers.get("Paychangu-Signature");
 
-  // Verify the webhook signature if needed (depends on Paychangu's documentation)
+
   if (!signature) {
     return NextResponse.json({ error: "Missing signature" }, { status: 400 });
   }
 
-  // Example of handling a Paychangu webhook event (check Paychangu documentation for event structure)
   const eventType = body?.event;
   
   switch (eventType) {
     case "payment.success": {
       const transaction = body?.data;
 
-      // Create an order in your database with Prisma
       await prisma.order.create({
         data: {
           amount: transaction.amount,
