@@ -3,7 +3,11 @@ import { LoadingProductCard, ProductCard } from "./ProductCard";
 import { Suspense } from "react";
 import { unstable_noStore as noStore } from "next/cache";
 
-async function getRelatedProducts(category: string, currentProductId: string) {
+// Define a union type for valid categories based on your Prisma enum
+type CategoryEnum = "fashion" | "retail" | "entertainment";
+
+// Fetch related products based on category and current product ID
+async function getRelatedProducts(category: CategoryEnum, currentProductId: string) {
   const data = await prisma.product.findMany({
     where: {
       status: "published",
@@ -26,7 +30,8 @@ async function getRelatedProducts(category: string, currentProductId: string) {
   return data;
 }
 
-export function RelatedProducts({ category, currentProductId }: { category: string, currentProductId: string }) {
+// Main component to render related products
+export function RelatedProducts({ category, currentProductId }: { category: CategoryEnum, currentProductId: string }) {
   return (
     <>
       <h2 className="text-2xl font-extrabold tracking-tight">Related Products</h2>
@@ -37,8 +42,9 @@ export function RelatedProducts({ category, currentProductId }: { category: stri
   );
 }
 
-async function LoadRelatedProducts({ category, currentProductId }: { category: string, currentProductId: string }) {
-  noStore();
+// Helper function to load related products
+async function LoadRelatedProducts({ category, currentProductId }: { category: CategoryEnum, currentProductId: string }) {
+  noStore(); // Disable caching for this component
   const data = await getRelatedProducts(category, currentProductId);
 
   return (
@@ -50,6 +56,7 @@ async function LoadRelatedProducts({ category, currentProductId }: { category: s
   );
 }
 
+// Loading state for the related products section
 function LoadingRows() {
   return (
     <div className="mt-5 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -59,4 +66,3 @@ function LoadingRows() {
     </div>
   );
 }
-
