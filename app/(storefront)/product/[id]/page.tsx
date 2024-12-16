@@ -1,11 +1,10 @@
-
 import { addItem } from "@/app/actions";
 import { ShoppingBagButton } from "@/app/components/SubmitButtons";
-import { FeaturedProducts } from "@/app/components/storefront/FeaturedProducts";
+import { RelatedProducts } from "@/app/components/storefront/RelatedProducts";
 import { ImageSlider } from "@/app/components/storefront/ImageSlider";
 import prisma from "@/app/lib/db";
 
-import { StarIcon } from "lucide-react";
+import { StarIcon } from 'lucide-react';
 import { notFound } from "next/navigation";
 import { unstable_noStore as noStore } from "next/cache";
 
@@ -21,6 +20,7 @@ async function getData(productId: string) {
       description: true,
       name: true,
       id: true,
+      category: true,
     },
   });
 
@@ -33,14 +33,14 @@ async function getData(productId: string) {
 
 // Async page component to fetch params and data
 export default async function ProductIdRoute({
-  params: paramsPromise, // Params are now a Promise in Next.js 15
+  params: paramsPromise,
 }: {
-  params: Promise<{ id: string }>; // Correct type for params as a Promise
+  params: Promise<{ id: string }>;
 }) {
   noStore();
 
   // Await params to resolve it
-  const { id } = await paramsPromise; // Await the params object
+  const { id } = await paramsPromise;
 
   // Fetch product data using the resolved id
   const data = await getData(id);
@@ -76,8 +76,9 @@ export default async function ProductIdRoute({
       </div>
 
       <div className="mt-16">
-        <FeaturedProducts />
+        <RelatedProducts category={data.category} currentProductId={data.id} />
       </div>
     </>
   );
 }
+
