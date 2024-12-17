@@ -145,7 +145,7 @@ export async function deleteBanner(formData: FormData) {
   redirect("/dashboard/banner");
 }
 
-export async function addItem(productId: string) {
+export async function addItem(productId: string) : Promise<ResultType> {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 
@@ -211,6 +211,76 @@ export async function addItem(productId: string) {
   await redis.set(`cart-${user.id}`, myCart);
 
   revalidatePath("/", "layout");
+}
+
+export async function buyNow(productId: string): Promise<ResultType> {
+  const { getUser } = getKindeServerSession();
+  const user = await getUser();
+
+  if (!user) {
+    return redirect("/login");
+  }
+
+  const cart: Cart | null = await redis.get(`cart-${user.id}`);
+
+  const selectedProduct = await prisma.product.findUnique({
+    select: {
+      id: true,
+      name: true,
+      price: true,
+      images: true,
+    },
+    where: {
+      id: productId,
+    },
+  });
+
+  if (!selectedProduct) {
+    throw new Error("Product not found");
+  }
+
+  let myCart = {} as Cart;
+
+  if (!cart || !cart.items) {
+    myCart = {
+      userId: user.id,
+      items: [
+        {
+          price: selectedProduct.price,
+          id: selectedProduct.id,
+          imageString: selectedProduct.images[0],
+          name: selectedProduct.name,
+          quantity: 1,
+        },
+      ],
+    };
+  } else {
+    let itemFound = false;
+
+    myCart.items = cart.items.map((item) => {
+      if (item.id === productId) {
+        itemFound = true;
+        item.quantity += 1;
+      }
+      return item;
+    });
+
+    if (!itemFound) {
+      myCart.items.push({
+        id: selectedProduct.id,
+        imageString: selectedProduct.images[0],
+        name: selectedProduct.name,
+        price: selectedProduct.price,
+        quantity: 1,
+      });
+    }
+  }
+
+  await redis.set(`cart-${user.id}`, myCart);
+
+  // Revalidate and redirect user to the cart page after adding the item
+  revalidatePath("/cart");
+  return redirect("/cart"); 
 }
 
 export async function delItem(formData: FormData) {

@@ -9,6 +9,10 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import Image from "next/image";
 import Link from "next/link";
+import { ShoppingCart } from 'lucide-react';
+import { Badge } from "@/components/ui/badge";
+import { addItem } from "@/app/actions"; 
+import { ShoppingBagButton } from "@/app/components/SubmitButtons";
 
 interface iAppProps {
   item: {
@@ -21,6 +25,10 @@ interface iAppProps {
 }
 
 export function ProductCard({ item }: iAppProps) {
+
+  // Bind the addProductToShoppingCart function to the product ID 
+   const addProductToShoppingCart = addItem.bind(null, data.id);
+
   return (
     <div className="rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 bg-white dark:bg-gray-800 overflow-hidden border border-gray-300 dark:border-gray-700">
       {/* Carousel */}
@@ -53,8 +61,10 @@ export function ProductCard({ item }: iAppProps) {
           <h1 className="font-semibold text-lg text-gray-900 dark:text-gray-100">
             {item.name}
           </h1>
-          <h3 className="bg-primary/10 text-primary px-3 py-1 rounded-md text-xs font-medium">
-            ${item.price.toFixed(2)}
+          <h3>
+          <Badge className="bg-primary/100 text-white px-3 py-1 rounded-md text-xs font-medium">
+           ${item.price.toFixed(2)}
+         </Badge>
           </h3>
         </div>
         {/* Description */}
@@ -62,12 +72,26 @@ export function ProductCard({ item }: iAppProps) {
           {item.description}
         </p>
         {/* CTA Button */}
-        <Button
-          asChild
-          className="w-full py-2 rounded-lg bg-primary hover:bg-primary-dark text-white dark:bg-primary-light dark:hover:bg-primary-dark-light transition-colors ease-in-out"
-        >
-          <Link href={`/product/${item.id}`}>Learn More</Link>
-        </Button>
+        <div className="flex items-center justify-between">
+          <Button
+            asChild
+            className="flex-1 mr-2"
+          >
+            <Link href={`/product/${item.id}`}>Learn More</Link>
+          </Button>
+          <Button
+            className="aspect-square"
+            size="icon"
+            variant="secondary"
+          >
+            <ShoppingCart className="h-4 w-4" />
+            <span className="sr-only">
+            <form action={addProductToShoppingCart}>
+              <ShoppingBagButton />
+             </form>
+            </span>
+          </Button>
+        </div>
       </div>
     </div>
   );
@@ -85,3 +109,4 @@ export function LoadingProductCard() {
     </div>
   );
 }
+
