@@ -12,7 +12,6 @@ import Link from "next/link";
 import { ShoppingCart } from 'lucide-react';
 import { Badge } from "@/components/ui/badge";
 import { addItem } from "@/app/actions"; 
-import { ShoppingBagButton } from "@/app/components/SubmitButtons";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface iAppProps {
@@ -25,14 +24,13 @@ interface iAppProps {
   };
 }
 
-// ...
-
 export function ProductCard({ item }: iAppProps) {
 
   // Bind the addProductToShoppingCart function to the product ID 
-   const handleAddProductToShoppingCart = async () => {
-     await addItem(item.id);
-   };
+  const handleAddProductToShoppingCart = async (e: React.FormEvent) => {
+    e.preventDefault(); // Prevent page refresh on form submission
+    await addItem(item.id); // Call server action
+  };
 
   return (
     <div className="rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 bg-white dark:bg-gray-800 overflow-hidden border border-gray-300 dark:border-gray-700">
@@ -67,9 +65,9 @@ export function ProductCard({ item }: iAppProps) {
             {item.name}
           </h1>
           <h3>
-          <Badge className="bg-primary/100 text-white px-3 py-1 rounded-md text-xs font-medium">
-           ${item.price.toFixed(2)}
-         </Badge>
+            <Badge className="bg-primary/100 text-white px-3 py-1 rounded-md text-xs font-medium">
+              ${item.price.toFixed(2)}
+            </Badge>
           </h3>
         </div>
         {/* Description */}
@@ -78,24 +76,17 @@ export function ProductCard({ item }: iAppProps) {
         </p>
         {/* CTA Button */}
         <div className="flex items-center justify-between">
-          <Button
-            asChild
-            className="flex-1 mr-2"
-          >
+          <Button className="flex-1 mr-2">
             <Link href={`/product/${item.id}`}>Learn More</Link>
           </Button>
-          <Button
-            className="aspect-square"
-            size="icon"
-            variant="secondary"
-          >
-            <ShoppingCart className="h-4 w-4" />
-            <span className="sr-only">
-              <form action={handleAddProductToShoppingCart}>
-                <ShoppingBagButton />
-              </form>
-            </span>
-          </Button>
+          
+          {/* Add to Cart Form */}
+          <form onSubmit={handleAddProductToShoppingCart}>
+            <Button className="aspect-square" size="icon" variant="secondary">
+              <ShoppingCart className="h-4 w-4" />
+              <span className="sr-only">Add to Cart</span>
+            </Button>
+          </form>
         </div>
       </div>
     </div>
@@ -114,6 +105,3 @@ export function LoadingProductCard() {
     </div>
   );
 }
-
-
-
