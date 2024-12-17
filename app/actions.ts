@@ -11,6 +11,11 @@ import { revalidatePath } from "next/cache";
 import { LevelData } from "@/types/paychangu";
 import crypto from "crypto";
 
+type ResultType = {
+  success: boolean;
+  message?: string;
+};
+
 export async function createProduct(prevState: unknown, formData: FormData) {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
@@ -150,7 +155,8 @@ export async function addItem(productId: string) : Promise<ResultType> {
   const user = await getUser();
 
   if (!user) {
-    return redirect("/");
+    redirect("/");
+    return { success: false, message: "User not authenticated" };
   }
 
   const cart: Cart | null = await redis.get(`cart-${user.id}`);
@@ -211,6 +217,7 @@ export async function addItem(productId: string) : Promise<ResultType> {
   await redis.set(`cart-${user.id}`, myCart);
 
   revalidatePath("/", "layout");
+  return { success: true, message: "Product added to cart" };
 }
 
 export async function buyNow(productId: string): Promise<ResultType> {
@@ -218,7 +225,8 @@ export async function buyNow(productId: string): Promise<ResultType> {
   const user = await getUser();
 
   if (!user) {
-    return redirect("/login");
+    redirect("/login");
+    return { success: false, message: "User not authenticated" };
   }
 
   const cart: Cart | null = await redis.get(`cart-${user.id}`);
