@@ -6,13 +6,14 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { Skeleton } from "@/components/ui/skeleton";
+
 import Image from "next/image";
 import Link from "next/link";
 import { ShoppingCart } from 'lucide-react';
 import { Badge } from "@/components/ui/badge";
 import { addItem } from "@/app/actions"; 
 import { ShoppingBagButton } from "@/app/components/SubmitButtons";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface iAppProps {
   item: {
@@ -24,10 +25,14 @@ interface iAppProps {
   };
 }
 
+// ...
+
 export function ProductCard({ item }: iAppProps) {
 
   // Bind the addProductToShoppingCart function to the product ID 
-   const addProductToShoppingCart = addItem.bind(null, data.id);
+   const handleAddProductToShoppingCart = async () => {
+     await addItem(item.id);
+   };
 
   return (
     <div className="rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 bg-white dark:bg-gray-800 overflow-hidden border border-gray-300 dark:border-gray-700">
@@ -86,9 +91,9 @@ export function ProductCard({ item }: iAppProps) {
           >
             <ShoppingCart className="h-4 w-4" />
             <span className="sr-only">
-            <form action={addProductToShoppingCart}>
-              <ShoppingBagButton />
-             </form>
+              <form action={handleAddProductToShoppingCart}>
+                <ShoppingBagButton />
+              </form>
             </span>
           </Button>
         </div>
@@ -109,4 +114,6 @@ export function LoadingProductCard() {
     </div>
   );
 }
+
+
 
