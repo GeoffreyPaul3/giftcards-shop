@@ -339,12 +339,13 @@ export async function checkOut() {
 
     // Set your custom exchange rate for USD to MWK
     const customExchangeRate = 2500;
+    
 
     // Convert the amount from USD to MWK using your custom rate
     const amountInMWK = amountInUSD * customExchangeRate;
 
     const data: LevelData = {
-      amount: amountInMWK, // Use the manually set MWK amount
+      amount: amountInMWK,
       currency: "MWK",
       email: user.email!,
       first_name: firstName,
@@ -352,11 +353,11 @@ export async function checkOut() {
       callback_url:
         process.env.NODE_ENV === "development"
           ? "http://localhost:3000/payment"
-          : "https://giftcards-shop.vercel.app/payment",
+          : "https://www.tconnect.store/payment",
       return_url:
         process.env.NODE_ENV === "development"
           ? "http://localhost:3000/payment"
-          : "https://giftcards-shop.vercel.app/payment",
+          : "https://www.tconnect.store/payment",
       tx_ref,
     };
 
