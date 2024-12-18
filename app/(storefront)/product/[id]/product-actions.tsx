@@ -50,16 +50,17 @@ export function ProductActions({ productId }: { productId: string }) {
       } else {
         throw new Error("Purchase failed");
       }
-    } catch (error) {
-      if (error.message !== "NEXT_REDIRECT") {
+    } catch (error: unknown) {
+      if (error instanceof Error && error.message !== "NEXT_REDIRECT") {
         // Only show toast if it's not a redirect error
         toast({
           title: "Error",
-          description: error instanceof Error ? error.message : "Purchase failed",
+          description: error.message || "An unknown error occurred",
           variant: "destructive",
         });
       }
-    } finally {
+    }
+     finally {
       setIsBuyingNow(false);
     }
   };
