@@ -8,13 +8,14 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-
 import Image from "next/image";
 import Link from "next/link";
 import { ShoppingCart } from 'lucide-react';
 import { Badge } from "@/components/ui/badge";
 import { addItem } from "@/app/actions"; 
+import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useState } from "react";
 
 interface iAppProps {
   item: {
@@ -27,15 +28,33 @@ interface iAppProps {
 }
 
 export function ProductCard({ item }: iAppProps) {
+  const { toast } = useToast(); // Initialize toast
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
 
-  // Bind the addProductToShoppingCart function to the product ID 
   const handleAddProductToShoppingCart = async (e: React.FormEvent) => {
     e.preventDefault(); // Prevent page refresh on form submission
-    await addItem(item.id); // Call server action
+    setIsAddingToCart(true);
+    try {
+      await addItem(item.id); // Call server action to add item to cart
+      toast({
+        title: "Success",
+        description: `${item.name} Item has been added to cart!`,
+        variant: "default", // You can customize the variant here
+      });
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to add item to cart. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsAddingToCart(false);
+    }
   };
 
   return (
-    <div className="rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 bg-white dark:bg-gray-800 overflow-hidden border border-gray-300 dark:border-gray-700">
+    <div className="rounded-lg shadow-lg hover:shadow-xl bg-white dark:bg-gray-800 overflow-hidden border border-gray-300 dark:border-gray-700">
       {/* Carousel */}
       <div className="relative w-full">
         <Carousel className="w-full">
@@ -81,14 +100,22 @@ export function ProductCard({ item }: iAppProps) {
           <Button className="flex-1 mr-2">
             <Link href={`/product/${item.id}`}>Learn More</Link>
           </Button>
-          
-          {/* Add to Cart Form */}
-          <form onSubmit={handleAddProductToShoppingCart}>
-            <Button className="aspect-square" size="icon" variant="secondary">
+
+          {/* Add to Cart Button */}
+          <Button 
+            className="aspect-square" 
+            size="icon" 
+            variant="secondary" 
+            onClick={handleAddProductToShoppingCart} 
+            disabled={isAddingToCart}
+          >
+            {isAddingToCart ? (
+              <span className="h-4 w-4 animate-spin">⏳</span> // Loading indicator
+            ) : (
               <ShoppingCart className="h-4 w-4" />
-              <span className="sr-only">Add to Cart</span>
-            </Button>
-          </form>
+            )}
+            <span className="sr-only">Add to Cart</span>
+          </Button>
         </div>
       </div>
     </div>

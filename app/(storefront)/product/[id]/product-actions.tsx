@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { ShoppingBag, CreditCard, Loader2 } from 'lucide-react';
 import { useState } from "react";
+import { useRouter } from "next/navigation";  // Import useRouter
 
 // Define the expected return type for addItem and buyNow
 type ResultType = { success: boolean; message?: string };
@@ -13,11 +14,12 @@ export function ProductActions({ productId }: { productId: string }) {
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [isBuyingNow, setIsBuyingNow] = useState(false);
   const { toast } = useToast();
+  const router = useRouter(); // Initialize the useRouter hook
 
   const handleAddToCart = async () => {
     setIsAddingToCart(true);
     try {
-      const result = (await addItem(productId)) as ResultType; // Type assertion
+      const result = (await addItem(productId)) as ResultType;
       if (result?.success) {
         toast({
           title: "Success",
@@ -40,12 +42,15 @@ export function ProductActions({ productId }: { productId: string }) {
   const handleBuyNow = async () => {
     setIsBuyingNow(true);
     try {
-      const result = (await buyNow(productId)) as ResultType; // Type assertion
+      const result = (await buyNow(productId)) as ResultType;
       if (result?.success) {
         toast({
           title: "Success",
           description: "Purchase successful",
         });
+
+        // Redirect to the /bag route after successful purchase
+        router.push('/bag');
       } else {
         throw new Error("Purchase failed");
       }
