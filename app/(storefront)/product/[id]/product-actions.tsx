@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { ShoppingBag, CreditCard, Loader2 } from 'lucide-react';
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 // Define the expected return type for addItem and buyNow
 type ResultType = { success: boolean; message?: string };
@@ -13,6 +14,7 @@ export function ProductActions({ productId }: { productId: string }) {
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [isBuyingNow, setIsBuyingNow] = useState(false);
   const { toast } = useToast();
+  const router = useRouter(); // Use Next.js router for redirection
 
   const handleAddToCart = async () => {
     setIsAddingToCart(true);
@@ -41,20 +43,22 @@ export function ProductActions({ productId }: { productId: string }) {
     setIsBuyingNow(true);
     try {
       const result = (await buyNow(productId)) as ResultType;
+
       if (result?.success) {
-        toast({
-          title: "Success",
-          description: "Purchase successful",
-        });
+        // Redirect to /bag without showing a toast notification
+        router.push("/bag");
       } else {
         throw new Error("Purchase failed");
       }
     } catch (error) {
-      toast({
-        title: "Error",
-        description: error instanceof Error ? error.message : "Purchase failed",
-        variant: "destructive",
-      });
+      if (error.message !== "NEXT_REDIRECT") {
+        // Only show toast if it's not a redirect error
+        toast({
+          title: "Error",
+          description: error instanceof Error ? error.message : "Purchase failed",
+          variant: "destructive",
+        });
+      }
     } finally {
       setIsBuyingNow(false);
     }
@@ -90,4 +94,3 @@ export function ProductActions({ productId }: { productId: string }) {
     </div>
   );
 }
-

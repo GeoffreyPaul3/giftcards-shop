@@ -214,9 +214,9 @@ export async function addItem(productId: string): Promise<ResultType> {
   }
 
   await redis.set(`cart-${user.id}`, myCart);
-
   revalidatePath("/", "layout");
-  return { success: true, message: "Product added to cart" };
+
+  return{ success: true, message: "Product added to cart" };
 }
 
 export async function buyNow(productId: string): Promise<ResultType> {
@@ -224,11 +224,10 @@ export async function buyNow(productId: string): Promise<ResultType> {
   const user = await getUser();
 
   if (!user) {
-    return redirect("/login");
+    return { success: false, message: "User not authenticated, redirect to login" };
   }
 
   const cart: Cart | null = await redis.get(`cart-${user.id}`);
-
   const selectedProduct = await prisma.product.findUnique({
     select: {
       id: true,
@@ -236,9 +235,7 @@ export async function buyNow(productId: string): Promise<ResultType> {
       price: true,
       images: true,
     },
-    where: {
-      id: productId,
-    },
+    where: { id: productId },
   });
 
   if (!selectedProduct) {
@@ -246,7 +243,6 @@ export async function buyNow(productId: string): Promise<ResultType> {
   }
 
   let myCart = {} as Cart;
-
   if (!cart || !cart.items) {
     myCart = {
       userId: user.id,
@@ -262,8 +258,7 @@ export async function buyNow(productId: string): Promise<ResultType> {
     };
   } else {
     let itemFound = false;
-
-    myCart.items = cart.items.map((item) => {
+    myCart.items = cart.items.map(item => {
       if (item.id === productId) {
         itemFound = true;
         item.quantity += 1;
@@ -284,10 +279,13 @@ export async function buyNow(productId: string): Promise<ResultType> {
 
   await redis.set(`cart-${user.id}`, myCart);
 
-  // Revalidate and redirect user to the cart page after adding the item
-  revalidatePath("/bag");
-  return redirect("/bag");
+  // Perform redirection directly here
+  redirect("/bag");
+
+  return { success: true, message: "Product added to cart" };
 }
+
+
 
 export async function delItem(formData: FormData) {
   const { getUser } = getKindeServerSession();
