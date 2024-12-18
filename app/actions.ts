@@ -150,13 +150,12 @@ export async function deleteBanner(formData: FormData) {
   redirect("/dashboard/banner");
 }
 
-export async function addItem(productId: string) : Promise<ResultType> {
+export async function addItem(productId: string): Promise<ResultType> {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 
   if (!user) {
-    redirect("/");
-    return { success: false, message: "User not authenticated" };
+    return redirect("/");
   }
 
   const cart: Cart | null = await redis.get(`cart-${user.id}`);
@@ -225,8 +224,7 @@ export async function buyNow(productId: string): Promise<ResultType> {
   const user = await getUser();
 
   if (!user) {
-    redirect("/login");
-    return { success: false, message: "User not authenticated" };
+    return redirect("/login");
   }
 
   const cart: Cart | null = await redis.get(`cart-${user.id}`);
@@ -287,8 +285,8 @@ export async function buyNow(productId: string): Promise<ResultType> {
   await redis.set(`cart-${user.id}`, myCart);
 
   // Revalidate and redirect user to the cart page after adding the item
-  revalidatePath("/cart");
-  return redirect("/cart"); 
+  revalidatePath("/bag");
+  return redirect("/bag");
 }
 
 export async function delItem(formData: FormData) {
