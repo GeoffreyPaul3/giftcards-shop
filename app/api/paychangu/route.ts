@@ -1,20 +1,19 @@
 import prisma from "@/app/lib/db";
 import { redis } from "@/app/lib/redis";
-import type { NextApiRequest, NextApiResponse } from "next";
+import { NextResponse } from "next/server";
 import axios from "axios";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
-  }
-
-  const { tx_ref } = req.body;
-
-  if (!tx_ref) {
-    return res.status(400).json({ error: "Missing transaction reference" });
-  }
-
+// Define POST request handler
+export async function POST(req: Request) {
   try {
+    const body = await req.json();
+    const { tx_ref } = body;
+
+    if (!tx_ref) {
+      return NextResponse.json({ error: "Missing transaction reference" }, { status: 400 });
+    }
+
+    // Verify transaction with Paychangu
     const { data: transaction } = await axios.get(`https://api.paychangu.com/verify-payment/${tx_ref}`, {
       headers: {
         Authorization: `Bearer ${process.env.PAYCHANGU_SECRET_KEY}`,
@@ -22,8 +21,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       },
     });
 
+    // If transaction is successful, create an order
     if (transaction.status === "success") {
-      // Create an order in the database
       await prisma.order.create({
         data: {
           amount: transaction.amount,
@@ -34,15 +33,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         },
       });
 
-      // Clear the user's cart in Redis
+      // Clear the user's cart from Redis
       await redis.del(`cart-${transaction.metadata?.userId}`);
 
-      res.status(200).json({ status: "success" });
+      return NextResponse.json({ status: "success" }, { status: 200 });
     } else {
-      res.status(400).json({ error: "Transaction verification failed" });
+      return NextResponse.json({ error: "Transaction verification failed" }, { status: 400 });
     }
   } catch (error) {
     console.error("Error verifying transaction:", error);
-    res.status(500).json({ error: "Order creation failed" });
+    return NextResponse.json({ error: "Order creation failed" }, { status: 500 });
   }
 }
