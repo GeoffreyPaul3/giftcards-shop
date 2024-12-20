@@ -33,11 +33,12 @@ export async function POST(req: Request) {
         },
       });
 
-      // Clear the user's cart from Redis
+      // Clear the user's cart in Redis
       await redis.del(`cart-${transaction.metadata?.userId}`);
 
       return NextResponse.json({ status: "success" }, { status: 200 });
     } else {
+      console.error("Transaction verification failed:", transaction);
       return NextResponse.json({ error: "Transaction verification failed" }, { status: 400 });
     }
   } catch (error) {
