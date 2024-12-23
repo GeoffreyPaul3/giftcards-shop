@@ -1,6 +1,5 @@
 import PaymentConfirmation from "./components/PaymentComfirmation";
 
-
 type Props = {
   searchParams: Promise<{ tx_ref: string }>;
 };
@@ -14,6 +13,5 @@ const Page = async ({ searchParams }: Props) => {
     </div>
   );
 };
-
 
 export default Page;

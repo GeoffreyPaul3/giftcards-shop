@@ -1,20 +1,20 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
 import axios from "axios";
 import Spinner from "@/app/components/Spinner";
 import PaymentSuccess from "./PaymentSuccess";
 import PaymentFailed from "./PaymentFailed";
 
-const PaymentConfirmation = () => {
-  const params = useSearchParams();
+interface PaymentConfirmationProps {
+  tx_ref: string;
+}
+
+const PaymentConfirmation = ({ tx_ref }: PaymentConfirmationProps) => {
   const [status, setStatus] = useState<"loading" | "success" | "failed">("loading");
 
   useEffect(() => {
     const handlePaymentCallBack = async () => {
-      const tx_ref = params?.get("tx_ref");
-
       if (tx_ref) {
         try {
           const { data } = await axios.get(`/api/verify-payment?tx_ref=${tx_ref}`);
@@ -36,7 +36,7 @@ const PaymentConfirmation = () => {
     };
 
     handlePaymentCallBack();
-  }, [params]);
+  }, [tx_ref]);
 
   if (status === "loading") {
     return (
