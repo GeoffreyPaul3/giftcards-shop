@@ -45,7 +45,7 @@ export function ProductCard({ item }: iAppProps) {
     } catch (error) {
       toast({
         title: "Error",
-        description: "Failed to add item to cart. Please try again.",
+        description: "Please log in to add items to the cart.",
         variant: "destructive",
       });
     } finally {

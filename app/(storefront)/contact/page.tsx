@@ -7,35 +7,31 @@ import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 
-export default function Contact() {
-  const [loading, setLoading] = useState(false);
+const ContactPage = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-
-    const formData = {
-      firstName: (e.currentTarget.elements.namedItem("name") as HTMLInputElement).value,
-      email: (e.currentTarget.elements.namedItem("email") as HTMLInputElement).value,
-      message: (e.currentTarget.elements.namedItem("message") as HTMLTextAreaElement).value,
-    };
+    setIsSubmitting(true);
 
     try {
-      const response = await axios.post("/api/send", {
-        firstName: formData.firstName,
-        email: formData.email,
-      });
+      const response = await axios.post("/api/contact", { name, email, message });
 
-      if (response.status === 200) {
-        toast.success("Message sent! We will get back to you shortly.");
+      if (response.data.success) {
+        toast.success("Message sent successfully");
+        setName("");
+        setEmail("");
+        setMessage("");
       } else {
-        throw new Error("Failed to send message");
+        toast.error("Failed to send message");
       }
-    } catch (error) {
-      toast.error("Failed to send message. Please try again.");
-      console.error("Error sending email:", error);
+    } catch {
+      toast.error("Failed to send message");
     } finally {
-      setLoading(false);
+      setIsSubmitting(false);
     }
   };
 
@@ -59,6 +55,8 @@ export default function Contact() {
             <Input
               name="name"
               id="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               required
               className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />
@@ -72,6 +70,8 @@ export default function Contact() {
               name="email"
               id="email"
               type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
               className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />
@@ -85,6 +85,8 @@ export default function Contact() {
               name="message"
               id="message"
               rows={4}
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
               required
               className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />
@@ -93,13 +95,13 @@ export default function Contact() {
           <Button
             type="submit"
             className={`w-full py-3 px-4 text-white font-medium rounded-md ${
-              loading
+              isSubmitting
                 ? "bg-indigo-400 cursor-not-allowed"
                 : "bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500"
             } transition duration-150 ease-in-out`}
-            disabled={loading}
+            disabled={isSubmitting}
           >
-            {loading ? (
+            {isSubmitting ? (
               <span className="loader inline-block h-5 w-5 border-t-2 border-b-2 border-white rounded-full animate-spin"></span>
             ) : (
               "Send Message"
@@ -109,5 +111,6 @@ export default function Contact() {
       </div>
     </div>
   );
-}
+};
 
+export default ContactPage;

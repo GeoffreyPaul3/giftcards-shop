@@ -7,15 +7,9 @@ import Spinner from "@/app/components/Spinner";
 import PaymentSuccess from "./PaymentSuccess";
 import PaymentFailed from "./PaymentFailed";
 
-interface PaymentConfirmationProps {
-  tx_ref: string;
-}
-
-const PaymentConfirmation = ({ }: PaymentConfirmationProps) => {
+const PaymentConfirmation = () => {
   const params = useSearchParams();
-  const [status, setStatus] = useState<"loading" | "success" | "failed">(
-    "loading"
-  );
+  const [status, setStatus] = useState<"loading" | "success" | "failed">("loading");
 
   useEffect(() => {
     const handlePaymentCallBack = async () => {
@@ -23,9 +17,7 @@ const PaymentConfirmation = ({ }: PaymentConfirmationProps) => {
 
       if (tx_ref) {
         try {
-          const { data } = await axios.get(
-            `/api/verify-payment?tx_ref=${tx_ref}`
-          );
+          const { data } = await axios.get(`/api/verify-payment?tx_ref=${tx_ref}`);
 
           if (data.status === "success") {
             setStatus("success");
@@ -51,7 +43,7 @@ const PaymentConfirmation = ({ }: PaymentConfirmationProps) => {
       <>
         <div className="fixed inset-0 bg-gray-900 bg-opacity-50 z-40"></div>
         <div className="fixed inset-0 flex items-center justify-center z-50">
-          <Spinner size={40} color="white" /> 
+          <Spinner size={40} color="white" />
         </div>
       </>
     );
