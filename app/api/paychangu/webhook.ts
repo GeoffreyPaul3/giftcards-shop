@@ -11,13 +11,15 @@ export async function POST(req: Request) {
   const hash = crypto.createHmac("sha256", secret).update(body).digest("hex");
 
   if (hash !== signature) {
+    console.error("Webhook signature verification failed");
     return new Response("Webhook signature verification failed", { status: 400 });
   }
 
   let event;
   try {
     event = JSON.parse(body);
-  } catch {
+  } catch (error) {
+    console.error("Invalid JSON payload:", error);
     return new Response("Invalid JSON payload", { status: 400 });
   }
 
@@ -25,19 +27,29 @@ export async function POST(req: Request) {
     case "success": {
       const { amount, status, reference, metadata } = event;
 
-      // Create an order in the database
-      await prisma.order.create({
-        data: {
-          amount: parseFloat(amount),
-          status,
-          userId: metadata?.userId,
-          transactionId: reference,
-          paymentMethod: "PayChangu",
-        },
-      });
+      try {
+        // Create an order in the database
+        const order = await prisma.order.create({
+          data: {
+            amount: parseFloat(amount),
+            status,
+            userId: metadata?.userId,
+            transactionId: reference,
+            paymentMethod: "PayChangu",
+          },
+        });
 
-      // Clear the user's cart in Redis
-      await redis.del(`cart-${metadata?.userId}`);
+        console.log("Order created successfully:", order);
+
+        // Clear the user's cart in Redis
+        const cartKey = `cart-${metadata?.userId}`;
+        const cartCleared = await redis.del(cartKey);
+
+        console.log(`Cart cleared for user ${metadata?.userId}:`, cartCleared);
+      } catch (error) {
+        console.error("Error creating order or clearing cart:", error);
+        return new Response("Error creating order or clearing cart", { status: 500 });
+      }
 
       break;
     }
