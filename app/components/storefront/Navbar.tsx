@@ -54,11 +54,11 @@ export async function Navbar() {
         ) : (
           <div className="hidden md:flex space-x-2">
             <Button variant="outline" asChild>
-             <Link href="/sign-in">Sign in</Link>
+             <Link href="/auth/sign-in">Sign in</Link>
             </Button>
             <span className="h-6 w-px bg-gray-200"></span>
           <Button asChild>
-            <Link href="/sign-up">Create Account</Link>
+            <Link href="/auth/sign-up">Create Account</Link>
            </Button>
            </div>
         )}
@@ -92,10 +92,10 @@ export async function Navbar() {
               {!user && (
                 <div className="mt-6 space-y-2">
                   <Button variant="ghost" asChild className="w-full">
-                  <Link href="/sign-in">Sign in</Link>
+                  <Link href="/auth/sign-in">Sign in</Link>
                   </Button>
                   <Button variant="ghost" asChild className="w-full">
-                  <Link href="/sign-up">Create Account</Link>
+                  <Link href="/auth/sign-up">Create Account</Link>
                   </Button>
                 </div>
               )}
