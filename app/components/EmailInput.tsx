@@ -31,7 +31,6 @@ export default function EmailInput({ isSignUp = false }: EmailInputProps) {
         authUrlParams={{
           connection_id: process.env.NEXT_PUBLIC_KINDE_CONNECTION_EMAIL_PASSWORDLESS || "",
           login_hint: email,
-          redirect_url: "/api/auth/creation"
         }}
         className="w-full"
       >

@@ -1,6 +1,2 @@
-import { handleAuth } from "@kinde-oss/kinde-auth-nextjs/server";
-
-export const GET = handleAuth({
-  callbackUrl: "/api/auth/creation",
-});
-
+import {handleAuth} from "@kinde-oss/kinde-auth-nextjs/server";
+export const GET = handleAuth();

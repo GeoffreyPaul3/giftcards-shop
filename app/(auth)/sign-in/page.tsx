@@ -25,8 +25,7 @@ export default function SignIn() {
           <LoginLink
             className="w-full"
             authUrlParams={{
-              connection_id: process.env.NEXT_PUBLIC_KINDE_CONNECTION_GOOGLE || "",
-              redirect_url: "/api/auth/creation"
+              connection_id: process.env.NEXT_PUBLIC_KINDE_CONNECTION_GOOGLE || ""
             }}
           >
             <Button variant="outline" className="w-full bg-white/10 border-white/20 text-white hover:bg-white/20">
