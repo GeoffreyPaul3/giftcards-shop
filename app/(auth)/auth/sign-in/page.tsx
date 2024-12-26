@@ -9,7 +9,7 @@ import EmailInput from "@/app/components/EmailInput";
 export default function SignIn() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-600 to-blue-800 p-4">
-      <Card className="w-full max-w-md bg-white/80 border-white/30 text-white">
+      <Card className="w-full max-w-md bg-white shadow-lg">
         <CardHeader className="space-y-1 flex flex-col items-center">
           <div className="rounded-full overflow-hidden mb-4">
             <Image
@@ -28,7 +28,7 @@ export default function SignIn() {
               connection_id: process.env.NEXT_PUBLIC_KINDE_CONNECTION_GOOGLE || ""
             }}
           >
-            <Button variant="outline" className="w-full bg-white/10 border-white/20 text-white hover:bg-white/20">
+            <Button variant="outline" className="w-full border-blue-300 text-blue-600 hover:bg-blue-50">
               <FaGoogle className="mr-2 h-4 w-4" />
               Sign in with Google
             </Button>
@@ -41,7 +41,7 @@ export default function SignIn() {
               <span className="bg-black/20 px-2 text-white/60">Or</span>
             </div>
           </div>
-          <EmailInput />
+          <EmailInput/>
         </CardContent>
         <CardFooter>
           <p className="text-sm text-center w-full text-white/60">
