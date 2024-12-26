@@ -22,6 +22,7 @@ export default function SignIn() {
           <CardTitle className="text-3xl font-bold text-center">Sign In to tconnect</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
+          {/* Google Sign-in */}
           <LoginLink
             className="w-full"
             authUrlParams={{
@@ -33,20 +34,25 @@ export default function SignIn() {
               Sign in with Google
             </Button>
           </LoginLink>
+
+          {/* Divider */}
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t border-white/20" />
+              <span className="w-full border-t border-gray-200" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-black/20 px-2 text-white/60">Or</span>
+              <span className="bg-white px-2 text-gray-500">Or</span>
             </div>
           </div>
-          <EmailInput/>
+
+          {/* Email Input for Email Sign-in */}
+          <EmailInput />
+
         </CardContent>
         <CardFooter>
-          <p className="text-sm text-center w-full text-white/60">
+          <p className="text-sm text-center w-full text-gray-500">
             Don&apos;t have an account?{" "}
-            <RegisterLink className="text-white hover:underline">
+            <RegisterLink className="text-blue-600 hover:underline">
               Create account
             </RegisterLink>
           </p>
@@ -55,4 +61,3 @@ export default function SignIn() {
     </div>
   );
 }
-
