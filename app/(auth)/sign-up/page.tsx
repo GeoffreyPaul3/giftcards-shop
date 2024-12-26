@@ -9,7 +9,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 export default function SignUp() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-600 to-blue-800 p-4">
-      <Card className="w-full max-w-md bg-black/20 border-white/10 text-white">
+      <Card className="w-full max-w-md bg-white/80 border-white/30 text-white">
         <CardHeader className="space-y-1 flex flex-col items-center">
           <div className="rounded-full overflow-hidden mb-4">
             <Image
