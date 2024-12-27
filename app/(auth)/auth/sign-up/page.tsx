@@ -36,7 +36,7 @@ export default function SignUp() {
           </RegisterLink>
 
           {/* Divider */}
-          <div className="relative">
+          <div className="relative mb-4">
             <div className="absolute inset-0 flex items-center">
               <span className="w-full border-t border-gray-200" />
             </div>
@@ -52,7 +52,12 @@ export default function SignUp() {
         <CardFooter>
           <p className="text-sm text-center w-full text-gray-500">
             Already have an account?{" "}
-            <LoginLink className="text-blue-600 hover:underline">
+                <LoginLink
+                  className="w-full"
+                  authUrlParams={{
+                  connection_id: process.env.NEXT_PUBLIC_KINDE_CONNECTION_GOOGLE || ""
+                  }}
+                      >
               Sign in
             </LoginLink>
           </p>

@@ -36,7 +36,7 @@ export default function SignIn() {
           </LoginLink>
 
           {/* Divider */}
-          <div className="relative">
+          <div className="relative mb-4">
             <div className="absolute inset-0 flex items-center">
               <span className="w-full border-t border-gray-200" />
             </div>
@@ -52,7 +52,12 @@ export default function SignIn() {
         <CardFooter>
           <p className="text-sm text-center w-full text-gray-500">
             Don&apos;t have an account?{" "}
-            <RegisterLink className="text-blue-600 hover:underline">
+            <RegisterLink
+              className="w-full"
+              authUrlParams={{
+              connection_id: process.env.NEXT_PUBLIC_KINDE_CONNECTION_GOOGLE || "",
+                        }}
+                      >
               Create account
             </RegisterLink>
           </p>
