@@ -1,48 +1,36 @@
-// pages/api/create-order.ts
-import prisma from "@/app/lib/db";
-import { redis } from "@/app/lib/redis";
+// pages/api/verify-payment.ts
+import type { NextApiRequest, NextApiResponse } from "next";
+import axios from "axios";
 
-export async function POST(req: Request) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method !== "GET") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
+
+  const { tx_ref } = req.query;
+
+  if (!tx_ref || typeof tx_ref !== "string") {
+    return res.status(400).json({ error: "Missing or invalid transaction reference" });
+  }
+
   try {
-    // Parse request body to get transaction reference, userId, and amount
-    const body = await req.json();
-    const { tx_ref, userId, amount } = body;
+    const response = await axios.get(
+      `https://api.paychangu.com/verify-payment/${tx_ref}`,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.PAYCHANGU_SECRET_KEY}`,
+          Accept: "application/json",
+        },
+      }
+    );
 
-    // Validate that all required fields are provided
-    if (!tx_ref || !userId || !amount) {
-      return new Response("Missing required data", { status: 400 });
+    if (response.data.status === "success") {
+      res.status(200).json({ status: "success", transaction: response.data });
+    } else {
+      res.status(400).json({ status: "failed" });
     }
-
-    // Step 1: Create an order in the database
-    const order = await prisma.order.create({
-      data: {
-        amount: parseFloat(amount),
-        status: "success", // Set to success since we're handling a successful payment
-        userId: userId,
-        transactionId: tx_ref,
-        paymentMethod: "PayChangu", // Assuming PayChangu is used as payment method
-      },
-    });
-
-    console.log("Order created successfully:", order);
-
-    // Step 2: Clear the user's cart in Redis
-    const cartKey = `cart-${userId}`;
-    const cartCleared = await redis.del(cartKey);
-
-    console.log(`Cart cleared for user ${userId}:`, cartCleared);
-
-    // Return success response after creating the order and clearing the cart
-    return new Response(
-      JSON.stringify({ message: "Order created and cart cleared successfully", order }),
-      { status: 200 }
-    );
   } catch (error) {
-    // Log and handle errors
-    console.error("Error creating order or clearing cart:", error);
-    return new Response(
-      JSON.stringify({ error: "Error creating order or clearing cart", details: (error instanceof Error ? error.message : String(error)) }),
-      { status: 500 }
-    );
+    console.error("Error verifying payment:", error);
+    res.status(500).json({ error: "Payment verification failed" });
   }
 }
