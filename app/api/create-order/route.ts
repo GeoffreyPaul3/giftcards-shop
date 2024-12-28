@@ -2,33 +2,47 @@ import { NextResponse } from "next/server";
 import prisma from "@/app/lib/db"; // Prisma client
 import { redis } from "@/app/lib/redis"; // Redis client
 
-export async function POST(req: Request) {
+export async function GET(req: Request) {
   try {
-    // Parse the request body
-    const { tx_ref, userId, amount } = await req.json();
+    // Extract tx_ref from the query string (URL)
+    const url = new URL(req.url);
+    const tx_ref = url.searchParams.get("tx_ref"); // tx_ref is passed in the URL query string
 
-    // Validation checks
-    if (
-      !tx_ref ||
-      !userId ||
-      !amount ||
-      isNaN(amount) ||
-      parseFloat(amount) <= 0
-    ) {
-      return NextResponse.json({ message: "Invalid data" }, { status: 400 });
+    if (!tx_ref) {
+      return NextResponse.json(
+        { message: "tx_ref is required" },
+        { status: 400 }
+      );
     }
 
-    // Ensure amount is a valid integer
-    const roundedAmount = Math.round(parseFloat(amount));
+    // Fetch the order details using tx_ref from the database (use findFirst instead of findUnique)
+    const orderDetails = await prisma.order.findFirst({
+      where: { transactionId: tx_ref }, // Use findFirst to query based on transactionId
+    });
 
-    // Create order in the database
-    const order = await prisma.order.create({
+    // If order details do not exist
+    if (!orderDetails) {
+      return NextResponse.json(
+        { message: "Order not found for the provided transaction reference." },
+        { status: 404 }
+      );
+    }
+
+    const { userId, amount } = orderDetails; // Extract userId and amount from the order
+
+    // Validate the order details (ensure the necessary fields are valid)
+    if (!userId || !amount) {
+      return NextResponse.json(
+        { message: "Invalid order details" },
+        { status: 400 }
+      );
+    }
+
+    // Mark the payment as successful by updating the order status
+    const updatedOrder = await prisma.order.update({
+      where: { id: orderDetails.id }, // Use id as the unique identifier to update the order
       data: {
-        amount: roundedAmount, // Rounded to ensure it's an integer
         status: "success", // Mark payment as successful
-        userId,
-        transactionId: tx_ref,
-        paymentMethod: "PayChangu", // Adjust according to your needs
       },
     });
 
@@ -36,20 +50,26 @@ export async function POST(req: Request) {
     const cartKey = `cart-${userId}`;
     try {
       await redis.del(cartKey); // Clear cart after successful payment
-    } catch (redisError) {
+    } catch (redisError: unknown) {
       if (redisError instanceof Error) {
         console.error("Error clearing Redis cart:", redisError.message);
       } else {
-        console.error("Error clearing Redis cart:", redisError);
+        console.error("Unknown error clearing Redis cart");
       }
     }
 
-    // Return success response with the created order
-    return NextResponse.json({ status: "success", order });
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (error: any) {
-    console.error("Error creating order and clearing cart:", error.message);
-    console.error("Stack trace:", error.stack);
+    // Return the success response with the updated order
+    return NextResponse.json({ status: "success", updatedOrder });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error(
+        "Error processing payment and clearing cart:",
+        error.message
+      );
+      console.error("Stack trace:", error.stack);
+    } else {
+      console.error("Unknown error occurred");
+    }
     return NextResponse.json(
       { message: "Internal server error" },
       { status: 500 }
