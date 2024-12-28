@@ -1,18 +1,14 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import prisma from "@/app/lib/db"; // Prisma client
-import { redis } from "@/app/lib/redis"; // Redis client
+import { NextResponse } from 'next/server';
+import prisma from '@/app/lib/db'; // Prisma client
+import { redis } from '@/app/lib/redis'; // Redis client
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ message: 'Method Not Allowed' });
-  }
-
-  const { tx_ref, userId, amount } = req.body;
-
+export async function POST(req: Request) {
   try {
+    const { tx_ref, userId, amount } = await req.json();
+
     // Validation checks
     if (!tx_ref || !userId || !amount || isNaN(amount)) {
-      return res.status(400).json({ message: 'Invalid data' });
+      return NextResponse.json({ message: 'Invalid data' }, { status: 400 });
     }
 
     // Create order in the database
@@ -30,9 +26,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const cartKey = `cart-${userId}`;
     await redis.del(cartKey); // Clear cart after successful payment
 
-    return res.status(200).json({ status: 'success', order });
+    return NextResponse.json({ status: 'success', order });
   } catch (error) {
     console.error('Error creating order and clearing cart:', error);
-    return res.status(500).json({ message: 'Internal server error' });
+    return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
   }
 }
