@@ -17,12 +17,16 @@ const PaymentConfirmation = ({ tx_ref }: PaymentConfirmationProps) => {
     const handlePaymentCallBack = async () => {
       if (tx_ref) {
         try {
-          // Verify the payment using the tx_ref
           const { data } = await axios.get(`/api/verify-payment?tx_ref=${tx_ref}`);
 
           if (data.status === "success") {
-            // When the payment is verified, trigger order creation and cart clearing
-            await handleOrderAndCartUpdate(tx_ref);
+            // Once payment is verified, call the API to create the order and clear the cart
+            const orderData = {
+              tx_ref: tx_ref,
+              userId: data.metadata.userId, // Assuming userId is part of the payment metadata
+              amount: data.amount, // Amount from the payment data
+            };
+            await axios.post(`/api/create-order`, orderData); 
             setStatus("success");
           } else {
             console.error("Payment verification failed.");
@@ -40,24 +44,6 @@ const PaymentConfirmation = ({ tx_ref }: PaymentConfirmationProps) => {
 
     handlePaymentCallBack();
   }, [tx_ref]);
-
-  const handleOrderAndCartUpdate = async (tx_ref: string) => {
-    try {
-      // Call backend API to handle order creation and cart clearing
-      const response = await axios.post("/api/paychangu", {
-        tx_ref,
-        status: "success", // Simulate success event for the webhook logic
-      });
-
-      if (response.status === 200) {
-        console.log("Order created and cart cleared successfully.");
-      } else {
-        console.error("Error during order creation or cart clearing.");
-      }
-    } catch (error) {
-      console.error("Error updating order and clearing cart:", error);
-    }
-  };
 
   if (status === "loading") {
     return (
