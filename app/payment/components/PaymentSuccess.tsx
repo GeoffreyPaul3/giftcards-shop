@@ -1,29 +1,91 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Check } from "lucide-react";
+import { Check, Receipt, Home, ShoppingBag } from "lucide-react";
 import { Card } from "@/components/ui/card";
+import { useRouter } from "next/navigation";
 
-const PaymentSuccess: React.FC = () => {
+interface PaymentSuccessProps {
+  orderId?: string;
+  amount?: number;
+}
+
+const PaymentSuccess: React.FC<PaymentSuccessProps> = ({ orderId, amount }) => {
+  const router = useRouter();
+  
+  const formattedAmount = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD'
+  }).format(amount || 0);
 
   return (
     <section className="w-full min-h-[80vh] flex items-center justify-center">
-      <Card className="w-[350px] shadow-lg hover:shadow-2xl">
-        <div className="p-6">
+      <Card className="w-[400px] shadow-lg hover:shadow-2xl transition-shadow duration-300">
+        <div className="p-8">
+          {/* Success Icon */}
           <div className="w-full flex justify-center">
-            <Check className="w-12 h-12 rounded-full bg-green-500/30 text-green-500 p-2" />
+            <div className="relative">
+              <div className="animate-ping absolute inline-flex h-12 w-12 rounded-full bg-green-400 opacity-25"></div>
+              <Check className="relative w-12 h-12 rounded-full bg-green-500/30 text-green-500 p-2" />
+            </div>
           </div>
 
-          <div className="mt-3 text-center sm:mt-5 w-full">
-            <h3 className="text-lg leading-6 font-medium">
-              Payment Successfull
+          {/* Success Message */}
+          <div className="mt-6 text-center w-full">
+            <h3 className="text-xl font-semibold text-green-600">
+              Payment Successful!
             </h3>
-            <p className="mt-2 text-sm text-muted-foreground">
-              Congrats on your purchase. Your payment was succesfully processed. We hope
-              you enjoy the product.
+            
+            {/* Order Details */}
+            <div className="mt-4 bg-gray-50 rounded-lg p-4">
+              {orderId && (
+                <p className="text-sm text-gray-600">
+                  Order ID: <span className="font-mono font-medium">{orderId}</span>
+                </p>
+              )}
+              {amount && (
+                <p className="text-sm text-gray-600 mt-1">
+                  Amount Paid: <span className="font-medium">{formattedAmount}</span>
+                </p>
+              )}
+            </div>
+
+            <p className="mt-4 text-sm text-muted-foreground">
+              Thank you for your purchase! We've sent a confirmation email with your order details.
             </p>
-            <Button asChild className="w-full mt-5 sm:mt-6">
-              <Link href="/my-orders">View Your Order</Link>
-            </Button>
+
+            {/* Action Buttons */}
+            <div className="mt-6 space-y-3">
+              <Button asChild className="w-full bg-green-600 hover:bg-green-700">
+                <Link href="/my-orders" className="flex items-center justify-center gap-2">
+                  <Receipt className="w-4 h-4" />
+                  View Your Order
+                </Link>
+              </Button>
+              
+              <div className="flex gap-3">
+                <Button 
+                  asChild 
+                  variant="outline" 
+                  className="w-full"
+                >
+                  <Link href="/" className="flex items-center justify-center gap-2">
+                    <Home className="w-4 h-4" />
+                    Home
+                  </Link>
+                </Button>
+                
+                <Button 
+                  asChild 
+                  variant="outline" 
+                  className="w-full"
+                >
+                  <Link href="/shop" className="flex items-center justify-center gap-2">
+                    <ShoppingBag className="w-4 h-4" />
+                    Continue Shopping
+                  </Link>
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
       </Card>
