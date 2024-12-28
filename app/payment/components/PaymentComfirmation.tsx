@@ -51,7 +51,7 @@ const PaymentConfirmation = ({ tx_ref }: PaymentConfirmationProps) => {
        
     return (
       <div className="mt-4">
-        <PaymentSuccess searchParams={{ tx_ref }} />
+        <PaymentSuccess />
       </div>
     );
   } else {
