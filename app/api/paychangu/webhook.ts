@@ -46,10 +46,19 @@ export async function POST(req: Request) {
         const cartCleared = await redis.del(cartKey);
 
         console.log(`Cart cleared for user ${metadata?.userId}:`, cartCleared);
+
+        // Optionally, send confirmation to the user (email/SMS/etc.)
       } catch (error) {
         console.error("Error creating order or clearing cart:", error);
         return new Response("Error creating order or clearing cart", { status: 500 });
       }
+
+      break;
+    }
+    case "failed": {
+      // Handle failed payment events if needed
+      const { reference, metadata } = event;
+      console.log(`Payment failed for transaction: ${reference} with metadata:`, metadata);
 
       break;
     }
