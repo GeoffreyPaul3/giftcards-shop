@@ -1,45 +1,36 @@
 "use client";
 
-import { cn } from "@/lib/utils";
+import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
-export const navbarLinks = [
+const navbarLinks = [
   {
-    id: 0,
+    id: 1,
     name: "Home",
     href: "/",
   },
   {
-    id: 1,
-    name: "All Products",
-    href: "/products/all",
-  },
-  {
     id: 2,
-    name: "Fashion",
-    href: "/products/fashion",
+    name: "Shop",
+    href: "/shop",
   },
   {
     id: 3,
-    name: "Retail",
-    href: "/products/retail",
-  },
-  {
-    id: 4,
-    name: "Entertainment",
-    href: "/products/entertainment",
-  },
-  {
-    id: 5,
     name: "My Orders",
     href: "/my-orders",
   },
 ];
 
-export function NavbarLinks({ isMobile = false }: { isMobile?: boolean }) {
+interface NavbarLinksProps {
+  isMobile?: boolean;
+  onLinkClick?: () => void;
+}
+
+export function NavbarLinks({ isMobile = false, onLinkClick }: NavbarLinksProps) {
   const location = usePathname();
-  
+
   return (
     <div className={cn(isMobile ? "flex flex-col space-y-4" : "hidden md:flex justify-center items-center gap-x-2 ml-8")}>
       {navbarLinks.map((item) => (
@@ -52,6 +43,7 @@ export function NavbarLinks({ isMobile = false }: { isMobile?: boolean }) {
               : "hover:bg-muted hover:bg-opacity-75",
             "group p-2 font-medium rounded-md"
           )}
+          onClick={onLinkClick}
         >
           {item.name}
         </Link>
