@@ -9,7 +9,7 @@ const Page = async ({ searchParams }: Props) => {
 
   return (
     <div className="mt-20">
-      <PaymentConfirmation tx_ref={tx_ref} />
+      <PaymentConfirmation tx_ref={tx_ref} userId="someUserId" amount={100} />
     </div>
   );
 };
