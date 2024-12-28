@@ -4,10 +4,6 @@ import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { ShoppingBagIcon, Menu } from "lucide-react";
 import { UserDropdown } from "./UserDropdown";
 import { Button } from "@/components/ui/button";
-import {
-  LoginLink,
-  RegisterLink,
-} from "@kinde-oss/kinde-auth-nextjs/components";
 import { redis } from "@/app/lib/redis";
 import { Cart } from "@/app/lib/interfaces";
 import Image from "next/image";
@@ -58,13 +54,13 @@ export async function Navbar() {
         ) : (
           <div className="hidden md:flex space-x-2">
             <Button variant="outline" asChild>
-              <LoginLink>Sign in</LoginLink>
+             <Link href="/auth/sign-in">Sign in</Link>
             </Button>
             <span className="h-6 w-px bg-gray-200"></span>
-            <Button asChild>
-              <RegisterLink>Create Account</RegisterLink>
-            </Button>
-          </div>
+          <Button asChild>
+            <Link href="/auth/sign-up">Create Account</Link>
+           </Button>
+           </div>
         )}
 
         {/* Mobile Menu Trigger */}
@@ -96,10 +92,10 @@ export async function Navbar() {
               {!user && (
                 <div className="mt-6 space-y-2">
                   <Button variant="ghost" asChild className="w-full">
-                    <LoginLink>Sign in</LoginLink>
+                  <Link href="/auth/sign-in">Sign in</Link>
                   </Button>
                   <Button variant="ghost" asChild className="w-full">
-                    <RegisterLink>Create Account</RegisterLink>
+                  <Link href="/auth/sign-up">Create Account</Link>
                   </Button>
                 </div>
               )}
@@ -110,4 +106,3 @@ export async function Navbar() {
     </nav>
   );
 }
-
