@@ -8,39 +8,19 @@ import PaymentFailed from "./PaymentFailed";
 
 interface PaymentConfirmationProps {
   tx_ref: string;
-  userId: string; // Add userId prop
-  amount: number; // Add amount prop
 }
 
-const PaymentConfirmation = ({ tx_ref, userId, amount }: PaymentConfirmationProps) => {
+const PaymentConfirmation = ({ tx_ref }: PaymentConfirmationProps) => {
   const [status, setStatus] = useState<"loading" | "success" | "failed">("loading");
 
   useEffect(() => {
     const handlePaymentCallBack = async () => {
       if (tx_ref) {
         try {
-          // First verify the payment
-          const { data: verificationData } = await axios.get(`/api/verify-payment?tx_ref=${tx_ref}`);
+          const { data } = await axios.get(`/api/verify-payment?tx_ref=${tx_ref}`);
 
-          if (verificationData.status === "success") {
-            // If payment verification is successful, process the order and clear cart
-            try {
-              const { data: processData } = await axios.post('/api/payment-success', {
-                tx_ref,
-                userId,
-                amount
-              });
-
-              if (processData.status === "success") {
-                setStatus("success");
-              } else {
-                console.error("Order processing failed");
-                setStatus("failed");
-              }
-            } catch (processError) {
-              console.error("Error processing order:", processError);
-              setStatus("failed");
-            }
+          if (data.status === "success") {
+            setStatus("success");
           } else {
             console.error("Payment verification failed.");
             setStatus("failed");
@@ -56,7 +36,7 @@ const PaymentConfirmation = ({ tx_ref, userId, amount }: PaymentConfirmationProp
     };
 
     handlePaymentCallBack();
-  }, [tx_ref, userId, amount]);
+  }, [tx_ref]);
 
   if (status === "loading") {
     return (
@@ -68,6 +48,7 @@ const PaymentConfirmation = ({ tx_ref, userId, amount }: PaymentConfirmationProp
       </>
     );
   } else if (status === "success") {
+       
     return (
       <div className="mt-4">
         <PaymentSuccess />
