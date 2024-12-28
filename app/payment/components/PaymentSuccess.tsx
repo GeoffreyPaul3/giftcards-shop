@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Check, Receipt, Home, ShoppingBag } from "lucide-react";
 import { Card } from "@/components/ui/card";
-import { useRouter } from "next/navigation";
+
 
 interface PaymentSuccessProps {
   orderId?: string;
@@ -10,7 +10,6 @@ interface PaymentSuccessProps {
 }
 
 const PaymentSuccess: React.FC<PaymentSuccessProps> = ({ orderId, amount }) => {
-  const router = useRouter();
   
   const formattedAmount = new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -50,7 +49,7 @@ const PaymentSuccess: React.FC<PaymentSuccessProps> = ({ orderId, amount }) => {
             </div>
 
             <p className="mt-4 text-sm text-muted-foreground">
-              Thank you for your purchase! We've sent a confirmation email with your order details.
+              Thank you for your purchase! We&apos;ve sent a confirmation email with your order details.
             </p>
 
             {/* Action Buttons */}
