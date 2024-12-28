@@ -1,4 +1,3 @@
-"use client";
 
 import Link from "next/link";
 import { NavbarLinks } from "./NavbarLinks";
@@ -9,8 +8,8 @@ import { Button } from "@/components/ui/button";
 import { redis } from "@/app/lib/redis";
 import { Cart } from "@/app/lib/interfaces";
 import Image from "next/image";
-import React from "react";
-import { MobileNav } from "./MobileNav"; // Import the MobileNav component
+import { MobileNav } from "./MobileNav"; 
+
 
 export async function Navbar() {
   const { getUser } = getKindeServerSession();
