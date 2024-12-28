@@ -7,14 +7,14 @@ export async function POST(req: Request) {
     const { tx_ref, userId, amount } = await req.json();
 
     // Validation checks
-    if (!tx_ref || !userId || !amount || isNaN(amount)) {
+    if (!tx_ref || !userId || !amount || isNaN(amount) || parseFloat(amount) <= 0) {
       return NextResponse.json({ message: 'Invalid data' }, { status: 400 });
     }
 
     // Create order in the database
     const order = await prisma.order.create({
       data: {
-        amount: parseFloat(amount),
+        amount: Math.round(parseFloat(amount)), // Round the amount if it's a float
         status: 'success', // Mark payment as successful
         userId,
         transactionId: tx_ref,
@@ -27,8 +27,10 @@ export async function POST(req: Request) {
     await redis.del(cartKey); // Clear cart after successful payment
 
     return NextResponse.json({ status: 'success', order });
-  } catch (error) {
-    console.error('Error creating order and clearing cart:', error);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    console.error('Error creating order and clearing cart:', error.message);
+    console.error('Stack trace:', error.stack);
     return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
   }
 }
