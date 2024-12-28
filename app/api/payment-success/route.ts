@@ -1,19 +1,12 @@
-// pages/api/payment-success.ts
-import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "@/app/lib/db";
 import { redis } from "@/app/lib/redis";
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
-  }
+import { NextRequest, NextResponse } from "next/server";
 
-  const { tx_ref, userId, amount } = req.body;
+export async function POST(req: NextRequest) {
+  const { tx_ref, userId, amount } = await req.json();
 
   if (!tx_ref || !userId || !amount) {
-    return res.status(400).json({ error: "Missing required data" });
+    return NextResponse.json({ error: "Missing required data" }, { status: 400 });
   }
 
   try {
@@ -32,11 +25,9 @@ export default async function handler(
     const cartKey = `cart-${userId}`;
     await redis.del(cartKey); // Clears the cart
 
-    return res.status(200).json({ status: "success", order });
+    return NextResponse.json({ status: "success", order });
   } catch (error) {
     console.error("Error processing payment:", error);
-    return res
-      .status(500)
-      .json({ error: "Error processing payment and clearing cart" });
+    return NextResponse.json({ error: "Error processing payment and clearing cart" }, { status: 500 });
   }
 }
