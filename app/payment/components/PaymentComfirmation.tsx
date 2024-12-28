@@ -20,13 +20,12 @@ const PaymentConfirmation = ({ tx_ref }: PaymentConfirmationProps) => {
           const { data } = await axios.get(`/api/verify-payment?tx_ref=${tx_ref}`);
 
           if (data.status === "success") {
-            // Once payment is verified, call the API to create the order and clear the cart
             const orderData = {
               tx_ref: tx_ref,
               userId: data.metadata.userId, // Assuming userId is part of the payment metadata
               amount: data.amount, // Amount from the payment data
             };
-            await axios.post(`/api/create-order`, orderData); 
+            await axios.post(`/api/create-order`, orderData);
             setStatus("success");
           } else {
             console.error("Payment verification failed.");
