@@ -1,20 +1,20 @@
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
 import { Card } from "@/components/ui/card";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
-// Fetch payment details and handle the response in a server component
+// Server component for handling payment success
 const PaymentSuccess = async ({ searchParams }: { searchParams: { [key: string]: string } }) => {
   const { tx_ref, userId, amount } = searchParams;
 
-  // Check if all required query parameters are available
+  // Ensure all required parameters are provided
   if (!tx_ref || !userId || !amount) {
     return (
       <section className="w-full min-h-[80vh] flex items-center justify-center">
         <Card className="w-[350px] shadow-lg hover:shadow-2xl">
           <div className="p-6">
             <div className="text-center text-red-500">
-              <p className="text-sm">Missing required parameters.</p>
+              <p className="text-sm">Missing required parameters. Please try again.</p>
             </div>
           </div>
         </Card>
@@ -23,7 +23,7 @@ const PaymentSuccess = async ({ searchParams }: { searchParams: { [key: string]:
   }
 
   try {
-    // Make the API request to process the payment
+    // Make an API request to process the payment
     const response = await fetch("/api/payment-success", {
       method: "POST",
       headers: {
@@ -31,6 +31,7 @@ const PaymentSuccess = async ({ searchParams }: { searchParams: { [key: string]:
       },
       body: JSON.stringify({ tx_ref, userId, amount }),
     });
+
     const data = await response.json();
 
     if (data.status === "success") {
@@ -44,7 +45,7 @@ const PaymentSuccess = async ({ searchParams }: { searchParams: { [key: string]:
               <div className="mt-3 text-center sm:mt-5 w-full">
                 <h3 className="text-lg leading-6 font-medium">Payment Successful</h3>
                 <p className="mt-2 text-sm text-muted-foreground">
-                  Congrats on your purchase. Your payment was successfully processed. We hope you enjoy the product.
+                  Congrats on your purchase! Your payment was successfully processed.
                 </p>
                 <Button asChild className="w-full mt-5 sm:mt-6">
                   <Link href="/my-orders">View Your Order</Link>
@@ -60,21 +61,20 @@ const PaymentSuccess = async ({ searchParams }: { searchParams: { [key: string]:
           <Card className="w-[350px] shadow-lg hover:shadow-2xl">
             <div className="p-6">
               <div className="text-center text-red-500">
-                <p className="text-sm">{data.error || "Error creating order."}</p>
+                <p className="text-sm">{data.error || "Error processing the payment."}</p>
               </div>
             </div>
           </Card>
         </section>
       );
     }
-  } catch (err) {
-    console.error(err);
+  } catch {
     return (
       <section className="w-full min-h-[80vh] flex items-center justify-center">
         <Card className="w-[350px] shadow-lg hover:shadow-2xl">
           <div className="p-6">
             <div className="text-center text-red-500">
-              <p className="text-sm">An error occurred while processing the payment.</p>
+              <p className="text-sm">An error occurred while processing the payment. Please try again later.</p>
             </div>
           </div>
         </Card>
