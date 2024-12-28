@@ -20,7 +20,7 @@ const PaymentFailed: React.FC = () => {
             Kindly try again.
           </p>
           <Button asChild className="w-full mt-5 sm:mt-6">
-            <Link href="/bag">Back to Homepage</Link>
+            <Link href="/bag">Try Again</Link>
           </Button>
         </div>
       </div>

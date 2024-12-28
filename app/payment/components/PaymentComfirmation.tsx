@@ -1,3 +1,4 @@
+// PaymentConfirmation.tsx
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -17,18 +18,22 @@ const PaymentConfirmation = ({ tx_ref }: PaymentConfirmationProps) => {
     const handlePaymentCallBack = async () => {
       if (tx_ref) {
         try {
+          // Request to verify the payment status from the backend API
           const { data } = await axios.get(`/api/verify-payment?tx_ref=${tx_ref}`);
 
+          console.log("Payment verification data:", data); // Log the data for debugging
+
           if (data.status === "success") {
-            const orderData = {
-              tx_ref: tx_ref,
-              userId: data.metadata.userId, // Assuming userId is part of the payment metadata
-              amount: data.amount, // Amount from the payment data
-            };
-            await axios.post(`/api/create-order`, orderData);
+            // If the payment is successful, proceed to create the order and clear the cart
+            await axios.post(`/api/create-order`, {
+              tx_ref,
+              userId: data.transaction.metadata?.userId, // Assuming metadata contains userId
+              amount: data.transaction.amount,
+            });
+
             setStatus("success");
           } else {
-            console.error("Payment verification failed.");
+            console.error("Payment verification failed:", data.message || "Unknown error");
             setStatus("failed");
           }
         } catch (error) {
